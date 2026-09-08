@@ -1,0 +1,1 @@
+- [Dependency firewall workarounds](dependency-firewall.md) — blocked transitive npm tarballs may need narrow safe-version overrides before first install.

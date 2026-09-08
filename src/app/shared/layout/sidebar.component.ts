@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -66,7 +66,6 @@ export class SidebarComponent {
   private sidebarService = inject(SidebarService);
   isCollapsed = this.sidebarService.isSidebarCollapsed;
   isMobileSidebarOpen = this.sidebarService.isMobileSidebarOpen;
-  isDarkMode = signal(false);
   unreadCount$ = this.store.select(selectUnreadCount);
 
   navItems: NavItem[] = [
@@ -81,12 +80,6 @@ export class SidebarComponent {
     { label: 'Reports', route: '/reporting', icon: 'reports' },
     { label: 'Notifications', route: '/notifications', icon: 'notifications', badge: true }
   ];
-
-  constructor() {
-    effect(() => {
-      this.isDarkMode.set(document.documentElement.classList.contains('dark'));
-    });
-  }
 
   toggleSidebar(): void {
     this.sidebarService.toggleSidebarCollapse(!this.isCollapsed());
