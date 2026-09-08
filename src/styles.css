@@ -386,3 +386,9 @@
     @apply min-h-11;
   }
 }
+
+/* Tooltip Portal Styles */
+.app-tooltip-portal {
+  z-index: 2147483647 !important;
+  position: fixed !important;
+}

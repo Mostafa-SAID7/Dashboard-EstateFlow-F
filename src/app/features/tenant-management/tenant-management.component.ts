@@ -7,11 +7,12 @@ import { debounceTime, Subject } from 'rxjs';
 import { TenantListComponent } from './components/tenant-list.component';
 import { Tenant } from '../../models/tenant.model';
 import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../shared/ui';
+import { InputComponent } from '../../shared/ui/input.component';
 
 @Component({
   selector: 'app-tenant-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, TenantListComponent, SearchBarComponent, ButtonComponent, AlertComponent],
+  imports: [CommonModule, FormsModule, TenantListComponent, SearchBarComponent, ButtonComponent, AlertComponent, InputComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="animate-in space-y-6">
@@ -22,20 +23,24 @@ import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../share
           <h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Tenants</h1>
           <p class="mt-1 text-sm text-[var(--ink-muted)]">Keep resident records and lease activity organized.</p>
         </div>
-        <button (click)="addTenant()" class="btn-primary"><i class="pi pi-plus text-xs"></i> Add tenant</button>
+        <app-button 
+          variant="primary" 
+          size="md"
+          icon="pi pi-plus"
+          label="Add tenant"
+          (click)="addTenant()">
+        </app-button>
       </div>
 
-      <!-- Search and Filters -->
+      <!-- Search -->
       <div class="dashboard-card">
-        <span class="p-input-icon-left w-full">
-          <i class="pi pi-search"></i>
-          <input pInputText
-            type="text"
-            placeholder="Search by name, email, or city..."
-            [(ngModel)]="searchQuery"
-            (ngModelChange)="onSearchChange($event)"
-            class="input-field w-full pl-10">
-        </span>
+        <app-input
+          type="text"
+          placeholder="Search by name, email, or city..."
+          icon="pi pi-search"
+          [(ngModel)]="searchQuery"
+          (valueChange)="onSearchChange($event)">
+        </app-input>
         <p class="mt-3 text-xs text-[var(--ink-muted)]">
           Showing {{ filteredTenants().length }} of {{ tenants().length }} tenants
         </p>
@@ -57,12 +62,6 @@ import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../share
   styles: [`
     :host {
       display: block;
-    }
-    ::ng-deep .p-input-icon-left > input {
-      padding-left: 2.5rem;
-    }
-    ::ng-deep .p-input-icon-left > i {
-      left: 0.75rem;
     }
   `]
 })

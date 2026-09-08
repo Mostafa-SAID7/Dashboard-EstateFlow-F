@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { InputComponent, ButtonComponent, AlertComponent, SpinnerComponent } from '../../../shared/ui';
 
@@ -24,6 +24,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
 
   loginForm: FormGroup;
   isLoading = signal<boolean>(false);
@@ -61,7 +62,12 @@ export class LoginComponent {
     this.authService.login(credentials).subscribe({
       next: (user) => {
         this.isLoading.set(false);
-        this.router.navigate(['/dashboard']);
+        
+        // Get the return URL from query parameters, default to dashboard
+        this.activatedRoute.queryParams.subscribe(params => {
+          const returnUrl = params['returnUrl'] || '/dashboard';
+          this.router.navigateByUrl(returnUrl);
+        });
       },
       error: (error) => {
         this.isLoading.set(false);

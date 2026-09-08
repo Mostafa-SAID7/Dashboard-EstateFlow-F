@@ -4,23 +4,31 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { debounceTime, Subject } from 'rxjs';
-import { ButtonModule } from 'primeng/button';
 import { PropertyCardComponent } from './components/property-card.component';
 import { FilterPanelComponent, PropertyFilters } from './components/filter-panel.component';
 import { Property } from '../../models/property.model';
 import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../shared/ui';
+import { SelectComponent } from '../../shared/ui/select.component';
+import { InputComponent } from '../../shared/ui/input.component';
+import { TooltipComponent } from '../../shared/ui/tooltip.component';
 
 @Component({
   selector: 'app-property-listing',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, PropertyCardComponent, FilterPanelComponent, SearchBarComponent, ButtonComponent, AlertComponent],
+  imports: [CommonModule, FormsModule, PropertyCardComponent, FilterPanelComponent, SearchBarComponent, ButtonComponent, AlertComponent, SelectComponent, InputComponent, TooltipComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="animate-in space-y-6">
       <!-- Header -->
       <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div><p class="eyebrow mb-2">Portfolio workspace</p><h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Properties</h1><p class="mt-1 text-sm text-[var(--ink-muted)]">Manage every property in your portfolio.</p></div>
-        <button (click)="exportSelected('csv')" class="btn-secondary"><i class="pi pi-download text-xs"></i> Export view</button>
+        <app-button 
+          variant="secondary" 
+          size="md"
+          icon="pi pi-download"
+          label="Export view"
+          (click)="exportSelected('csv')">
+        </app-button>
       </div>
 
       <div class="grid grid-cols-1 gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
@@ -37,25 +45,22 @@ import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../share
           <!-- Search and Controls -->
            <div class="dashboard-card mb-5">
             <div class="flex gap-4 mb-4 flex-col md:flex-row">
-              <span class="p-input-icon-left flex-1">
-                <i class="pi pi-search"></i>
-                <input pInputText
-                  type="text"
-                  placeholder="Search by address or property name..."
-                  [(ngModel)]="searchQuery"
-                  (ngModelChange)="onSearchChange($event)"
-                   class="input-field w-full pl-10">
-              </span>
+              <app-input
+                type="text"
+                placeholder="Search by address or property name..."
+                [(ngModel)]="searchQuery"
+                (valueChange)="onSearchChange($event)"
+                icon="pi pi-search"
+                class="flex-1">
+              </app-input>
               
-              <select [(ngModel)]="sortField"
-                      (ngModelChange)="applySorting($event)"
-                       class="input-field min-w-[11rem]">
-                <option value="address">Sort by Address</option>
-                <option value="price">Sort by Price</option>
-                <option value="occupancy">Sort by Occupancy</option>
-                <option value="revenue">Sort by Revenue</option>
-                <option value="roi">Sort by ROI</option>
-              </select>
+              <app-select
+                [(ngModel)]="sortField"
+                (valueChange)="applySorting($event)"
+                [options]="sortOptions"
+                placeholder="Sort properties"
+                class="min-w-[11rem]">
+              </app-select>
             </div>
 
             <!-- Results Info -->
@@ -81,18 +86,24 @@ import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../share
                 {{ selectedProperties().size }} properties selected
               </p>
               <div class="flex gap-2 flex-wrap">
-                <p-button
-                  label="Export CSV"
-                  icon="pi pi-download"
-                  (click)="exportSelected('csv')"
-                  severity="info">
-                </p-button>
-                <p-button
-                  label="Export Excel"
-                  icon="pi pi-download"
-                  (click)="exportSelected('excel')"
-                  severity="success">
-                </p-button>
+                <app-tooltip text="Export as CSV" position="top">
+                  <app-button
+                    variant="primary"
+                    size="md"
+                    icon="pi pi-download"
+                    label="Export CSV"
+                    (click)="exportSelected('csv')">
+                  </app-button>
+                </app-tooltip>
+                <app-tooltip text="Export as Excel" position="top">
+                  <app-button
+                    variant="secondary"
+                    size="md"
+                    icon="pi pi-download"
+                    label="Export Excel"
+                    (click)="exportSelected('excel')">
+                  </app-button>
+                </app-tooltip>
               </div>
             </div>
           </div>
@@ -119,12 +130,6 @@ import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../share
     :host {
       display: block;
     }
-    ::ng-deep .p-input-icon-left > input {
-      padding-left: 2.5rem;
-    }
-    ::ng-deep .p-input-icon-left > i {
-      left: 0.75rem;
-    }
   `]
 })
 export class PropertyListingComponent implements OnInit {
@@ -144,6 +149,14 @@ export class PropertyListingComponent implements OnInit {
     types: [],
     occupancyMin: 0
   });
+
+  sortOptions = [
+    { value: 'address', label: 'Sort by Address' },
+    { value: 'price', label: 'Sort by Price' },
+    { value: 'occupancy', label: 'Sort by Occupancy' },
+    { value: 'revenue', label: 'Sort by Revenue' },
+    { value: 'roi', label: 'Sort by ROI' }
+  ];
 
   private searchSubject = new Subject<string>();
 

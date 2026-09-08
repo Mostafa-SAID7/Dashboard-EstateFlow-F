@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectUnreadCount } from '../../store/notifications/notifications.selectors';
 import { SidebarService } from '../../services/sidebar.service';
+import { TooltipComponent } from '../ui/tooltip.component';
 
 interface NavItem {
   label: string;
@@ -15,47 +16,87 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, TooltipComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+    a.nav-active {
+      background-color: var(--brand-soft);
+      color: var(--brand-dark);
+    }
+    
+    a:hover {
+      background-color: var(--surface-muted);
+      color: var(--ink);
+    }
+  `],
   template: `
     <aside [ngClass]="{
       'w-64': !isCollapsed(),
-      'w-[4.75rem]': isCollapsed(),
+      'w-[5rem]': isCollapsed(),
       'translate-x-0': isMobileSidebarOpen(),
       '-translate-x-full': !isMobileSidebarOpen()
-      }" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--line)] bg-[var(--surface)] transition-all duration-300 md:sticky md:top-[5.25rem] md:h-[calc(100vh-5.25rem)] md:translate-x-0">
+      }" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--line)] bg-[var(--surface)] transition-all duration-300 md:sticky md:top-[5.25rem] md:h-[calc(100vh-5.25rem)] md:translate-x-0 md:rounded-tr-2xl md:rounded-br-2xl">
       <div class="hidden h-[5.25rem] shrink-0 items-center gap-3 px-5 md:flex" [class.justify-center]="isCollapsed()">
         <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-dark)] text-white shadow-sm"><i class="pi pi-chart-pie text-sm"></i></span>
         <span *ngIf="!isCollapsed()" class="font-display text-sm font-bold tracking-tight text-[var(--ink)]">Estate<span class="text-[var(--brand)]">Flow</span></span>
       </div>
 
-      <nav class="flex-1 overflow-y-auto px-4 py-7">
-        <p *ngIf="!isCollapsed()" class="eyebrow mb-3 px-3">Workspace</p>
-        <a *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }" (click)="closeMobileSidebar()" class="group relative mb-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)]" [class.justify-center]="isCollapsed()">
-          <i [class]="getIconClass(item.icon) + ' w-5 text-center text-base'"></i>
-          <span *ngIf="!isCollapsed()" class="truncate">{{ item.label }}</span>
-          <span *ngIf="item.badge && !isCollapsed()" class="ml-auto rounded-md bg-[var(--brand-dark)] px-1.5 py-0.5 text-[10px] font-bold text-white">{{ unreadCount$ | async }}</span>
-          <span *ngIf="isCollapsed()" class="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-lg bg-[var(--ink)] px-2 py-1 text-xs text-white opacity-0 shadow-lg transition group-hover:opacity-100">{{ item.label }}</span>
-        </a>
+      <nav [ngClass]="{
+        'flex flex-col items-center': isCollapsed(),
+        'flex-1 overflow-hidden': true
+      }" class="px-4 py-6">
+        <p *ngIf="!isCollapsed()" class="eyebrow mb-4 px-3 w-full">Workspace</p>
+        <div [ngClass]="{ 'flex flex-col items-center w-full gap-2': isCollapsed(), 'w-full': !isCollapsed() }">
+          <a *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }" (click)="closeMobileSidebar()" 
+            [ngClass]="{ 
+              'justify-center': isCollapsed(),
+              'w-full': !isCollapsed()
+            }" 
+            class="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[var(--ink-muted)] transition-all duration-200"
+            [class.w-11]="isCollapsed()"
+            [class.h-11]="isCollapsed()"
+            [class.rounded-full]="isCollapsed()">
+            <i [class]="getIconClass(item.icon) + ' w-5 text-center text-base flex-shrink-0'"></i>
+            <span *ngIf="!isCollapsed()" class="truncate">{{ item.label }}</span>
+            <span *ngIf="item.badge && !isCollapsed()" class="ml-auto rounded-md bg-[var(--brand-dark)] px-1.5 py-0.5 text-[10px] font-bold text-white">{{ unreadCount$ | async }}</span>
+            <app-tooltip *ngIf="isCollapsed()" [text]="item.label" position="right">
+              <span class="pointer-events-none"></span>
+            </app-tooltip>
+          </a>
+        </div>
 
-        <p *ngIf="!isCollapsed()" class="eyebrow mb-3 mt-8 px-3">Manage</p>
-        <a *ngFor="let item of secondaryItems" [routerLink]="item.route" routerLinkActive="nav-active" class="group relative mb-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)]" [class.justify-center]="isCollapsed()">
-          <i [class]="getIconClass(item.icon) + ' w-5 text-center text-base'"></i>
-          <span *ngIf="!isCollapsed()" class="truncate">{{ item.label }}</span>
-          <span *ngIf="isCollapsed()" class="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-lg bg-[var(--ink)] px-2 py-1 text-xs text-white opacity-0 shadow-lg transition group-hover:opacity-100">{{ item.label }}</span>
-        </a>
+        <p *ngIf="!isCollapsed()" class="eyebrow mb-4 mt-6 px-3 w-full">Manage</p>
+        <div [ngClass]="{ 'flex flex-col items-center w-full gap-2': isCollapsed(), 'w-full': !isCollapsed() }">
+          <a *ngFor="let item of secondaryItems" [routerLink]="item.route" routerLinkActive="nav-active" 
+            [ngClass]="{ 
+              'justify-center': isCollapsed(),
+              'w-full': !isCollapsed()
+            }" 
+            class="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[var(--ink-muted)] transition-all duration-200"
+            [class.w-11]="isCollapsed()"
+            [class.h-11]="isCollapsed()"
+            [class.rounded-full]="isCollapsed()">
+            <i [class]="getIconClass(item.icon) + ' w-5 text-center text-base flex-shrink-0'"></i>
+            <span *ngIf="!isCollapsed()" class="truncate">{{ item.label }}</span>
+            <app-tooltip *ngIf="isCollapsed()" [text]="item.label" position="right">
+              <span class="pointer-events-none"></span>
+            </app-tooltip>
+          </a>
+        </div>
       </nav>
 
-      <div class="border-t border-[var(--line)] p-4">
-        <div *ngIf="!isCollapsed()" class="mb-3 rounded-2xl bg-[var(--brand-dark)] p-4 text-white">
+      <div class="border-t border-[var(--line)] p-4 flex flex-col items-center gap-3" [ngClass]="{ 'items-center': isCollapsed() }">
+        <div *ngIf="!isCollapsed()" class="w-full rounded-2xl bg-[var(--brand-dark)] p-4 text-white">
           <div class="mb-3 flex items-center justify-between"><i class="pi pi-sparkles text-sm text-emerald-200"></i><span class="text-[9px] font-bold uppercase tracking-widest text-emerald-200">Pro plan</span></div>
           <p class="text-xs font-medium leading-5 text-emerald-50">Unlock advanced portfolio insights.</p>
           <button class="mt-3 text-xs font-bold text-white underline decoration-emerald-300 underline-offset-4">Upgrade now</button>
         </div>
-        <button (click)="toggleSidebar()" class="hidden w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)] md:flex" [class.justify-center]="isCollapsed()">
-          <i [class]="isCollapsed() ? 'pi pi-angle-right' : 'pi pi-angle-left'"></i>
-          <span *ngIf="!isCollapsed()">Collapse menu</span>
-        </button>
+        <app-tooltip [text]="isCollapsed() ? 'Expand' : 'Collapse menu'" position="right">
+          <button (click)="toggleSidebar()" class="hidden w-10 h-10 items-center justify-center rounded-lg text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)] md:flex" [ngClass]="{ 'w-full': !isCollapsed() }">
+            <i [class]="(isCollapsed() ? 'pi pi-angle-right' : 'pi pi-angle-left') + ' text-lg'"></i>
+            <span *ngIf="!isCollapsed()" class="ml-2">Collapse menu</span>
+          </button>
+        </app-tooltip>
       </div>
     </aside>
     <div *ngIf="isMobileSidebarOpen()" (click)="closeMobileSidebar()" class="fixed inset-0 z-40 bg-[var(--ink)]/40 backdrop-blur-sm md:hidden"></div>

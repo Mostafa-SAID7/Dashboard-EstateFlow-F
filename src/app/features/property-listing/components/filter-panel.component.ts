@@ -1,9 +1,8 @@
 import { Component, Output, EventEmitter, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ButtonModule } from 'primeng/button';
+import { InputComponent } from '../../../shared/ui/input.component';
+import { ButtonComponent } from '../../../shared/ui/button.component';
 
 export interface PropertyFilters {
   priceRange: { min: number; max: number };
@@ -16,7 +15,7 @@ export interface PropertyFilters {
 @Component({
   selector: 'app-filter-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputNumberModule, CheckboxModule, ButtonModule],
+  imports: [CommonModule, FormsModule, InputComponent, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="dashboard-card">
@@ -30,92 +29,102 @@ export interface PropertyFilters {
 
       <!-- Price Range -->
       <fieldset class="border-0 p-0 m-0 mb-6">
-         <legend class="eyebrow mb-2">Price range</legend>
-        <div class="flex flex-col sm:flex-row gap-2">
-          <p-inputNumber
-            [(ngModel)]="minPrice"
+         <legend class="eyebrow mb-3">Price range</legend>
+        <div class="flex flex-col gap-3">
+          <app-input
+            type="number"
             placeholder="Min price"
-            [useGrouping]="false"
-            class="flex-1">
-          </p-inputNumber>
-          <p-inputNumber
-            [(ngModel)]="maxPrice"
+            suffix="USD"
+            [(ngModel)]="minPrice"
+            (valueChange)="applyFilters()">
+          </app-input>
+          <app-input
+            type="number"
             placeholder="Max price"
-            [useGrouping]="false"
-            class="flex-1">
-          </p-inputNumber>
+            suffix="USD"
+            [(ngModel)]="maxPrice"
+            (valueChange)="applyFilters()">
+          </app-input>
         </div>
       </fieldset>
 
       <!-- Property Type -->
       <fieldset class="border-0 p-0 m-0 mb-6">
          <legend class="eyebrow mb-3">Property type</legend>
-        <div class="space-y-2">
-          <div class="flex items-center">
-            <p-checkbox
-              [(ngModel)]="selectedTypes"
+        <div class="space-y-3">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
               value="residential"
-              [binary]="false">
-            </p-checkbox>
-             <label class="ml-2 text-xs text-[var(--ink-muted)]">Residential</label>
-          </div>
-          <div class="flex items-center">
-            <p-checkbox
               [(ngModel)]="selectedTypes"
+              (change)="applyFilters()"
+              class="w-4 h-4 rounded border-[var(--line)] bg-[var(--surface-muted)] cursor-pointer accent-[var(--brand)]">
+            <span class="text-sm text-[var(--ink)]">Residential</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
               value="commercial"
-              [binary]="false">
-            </p-checkbox>
-             <label class="ml-2 text-xs text-[var(--ink-muted)]">Commercial</label>
-          </div>
-          <div class="flex items-center">
-            <p-checkbox
               [(ngModel)]="selectedTypes"
+              (change)="applyFilters()"
+              class="w-4 h-4 rounded border-[var(--line)] bg-[var(--surface-muted)] cursor-pointer accent-[var(--brand)]">
+            <span class="text-sm text-[var(--ink)]">Commercial</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
               value="mixed-use"
-              [binary]="false">
-            </p-checkbox>
-             <label class="ml-2 text-xs text-[var(--ink-muted)]">Mixed-Use</label>
-          </div>
+              [(ngModel)]="selectedTypes"
+              (change)="applyFilters()"
+              class="w-4 h-4 rounded border-[var(--line)] bg-[var(--surface-muted)] cursor-pointer accent-[var(--brand)]">
+            <span class="text-sm text-[var(--ink)]">Mixed-Use</span>
+          </label>
         </div>
       </fieldset>
 
       <!-- Occupancy Status -->
       <fieldset class="border-0 p-0 m-0 mb-6">
          <legend class="eyebrow mb-3">Occupancy status</legend>
-        <div class="space-y-2">
-          <div class="flex items-center">
-            <p-checkbox
-              [(ngModel)]="selectedStatuses"
+        <div class="space-y-3">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
               value="occupied"
-              [binary]="false">
-            </p-checkbox>
-             <label class="ml-2 text-xs text-[var(--ink-muted)]">Occupied</label>
-          </div>
-          <div class="flex items-center">
-            <p-checkbox
               [(ngModel)]="selectedStatuses"
+              (change)="applyFilters()"
+              class="w-4 h-4 rounded border-[var(--line)] bg-[var(--surface-muted)] cursor-pointer accent-[var(--brand)]">
+            <span class="text-sm text-[var(--ink)]">Occupied</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
               value="vacant"
-              [binary]="false">
-            </p-checkbox>
-             <label class="ml-2 text-xs text-[var(--ink-muted)]">Vacant</label>
-          </div>
-          <div class="flex items-center">
-            <p-checkbox
               [(ngModel)]="selectedStatuses"
+              (change)="applyFilters()"
+              class="w-4 h-4 rounded border-[var(--line)] bg-[var(--surface-muted)] cursor-pointer accent-[var(--brand)]">
+            <span class="text-sm text-[var(--ink)]">Vacant</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
               value="maintenance"
-              [binary]="false">
-            </p-checkbox>
-             <label class="ml-2 text-xs text-[var(--ink-muted)]">Maintenance</label>
-          </div>
+              [(ngModel)]="selectedStatuses"
+              (change)="applyFilters()"
+              class="w-4 h-4 rounded border-[var(--line)] bg-[var(--surface-muted)] cursor-pointer accent-[var(--brand)]">
+            <span class="text-sm text-[var(--ink)]">Maintenance</span>
+          </label>
         </div>
       </fieldset>
 
       <!-- Apply Button -->
-      <p-button
+      <app-button 
+        variant="primary" 
+        size="md"
         label="Apply Filters"
         icon="pi pi-check"
-        (click)="applyFilters()"
-        class="w-full">
-      </p-button>
+        class="w-full"
+        (click)="applyFilters()">
+      </app-button>
     </div>
   `,
   styles: [`

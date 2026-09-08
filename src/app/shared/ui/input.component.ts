@@ -47,6 +47,17 @@ type InputType = 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | '
     :host {
       display: block;
     }
+
+    /* Hide number input spinner arrows */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
   `]
 })
 export class InputComponent implements ControlValueAccessor {

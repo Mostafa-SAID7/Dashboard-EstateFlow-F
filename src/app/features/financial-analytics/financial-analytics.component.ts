@@ -6,37 +6,45 @@ import { Observable } from 'rxjs';
 import { FinancialService } from '../../services/financial.service';
 import { selectFinancialSummary, selectFinancialsIsLoading } from '../../store/financials/financials.selectors';
 import { loadFinancialSummary } from '../../store/financials/financials.actions';
-import { SelectModule } from 'primeng/select';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
+import { SelectComponent } from '../../shared/ui/select.component';
+import { ButtonComponent } from '../../shared/ui/button.component';
 
 @Component({
   selector: 'app-financial-analytics',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SelectModule, ButtonModule, CardModule],
+  imports: [CommonModule, ReactiveFormsModule, SelectComponent, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="animate-in space-y-6">
         <!-- Header -->
         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div><p class="eyebrow mb-2">Portfolio intelligence</p><h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Financial analytics</h1><p class="mt-1 text-sm text-[var(--ink-muted)]">Understand the health of your portfolio at a glance.</p></div>
-          <button class="btn-secondary"><i class="pi pi-download text-xs"></i> Export report</button>
+          <app-button 
+            variant="secondary" 
+            size="md"
+            icon="pi pi-download"
+            label="Export report">
+          </app-button>
         </div>
 
         <!-- Period Selector -->
         <div class="dashboard-card">
           <form [formGroup]="periodForm" class="flex flex-col gap-4 sm:flex-row sm:items-end">
             <div class="flex-1">
-               <label for="period" class="eyebrow mb-2 block">Period</label>
-              <p-select
-                id="period"
+              <app-select
                 formControlName="period"
                 [options]="periodOptions"
-                optionLabel="label"
-                optionValue="value">
-              </p-select>
+                placeholder="Select period"
+                label="Period">
+              </app-select>
             </div>
-            <button type="button" class="btn-primary" (click)="loadMetrics()"><i class="pi pi-refresh text-xs"></i> Load data</button>
+            <app-button 
+              variant="primary" 
+              size="md"
+              icon="pi pi-refresh"
+              label="Load data"
+              (click)="loadMetrics()">
+            </app-button>
           </form>
         </div>
 
@@ -77,9 +85,27 @@ import { CardModule } from 'primeng/card';
         <div class="dashboard-card">
             <h2 class="text-base font-bold text-[var(--ink)]">Export report</h2>
           <div class="mt-4 flex flex-wrap gap-2">
-            <button class="btn-primary" (click)="exportPDF()"><i class="pi pi-file-pdf text-xs"></i> PDF</button>
-            <button class="btn-secondary" (click)="exportExcel()"><i class="pi pi-file-excel text-xs"></i> Excel</button>
-            <button class="btn-secondary" (click)="exportCSV()"><i class="pi pi-file text-xs"></i> CSV</button>
+            <app-button 
+              variant="primary" 
+              size="md"
+              icon="pi pi-file-pdf"
+              label="PDF"
+              (click)="exportPDF()">
+            </app-button>
+            <app-button 
+              variant="secondary" 
+              size="md"
+              icon="pi pi-file-excel"
+              label="Excel"
+              (click)="exportExcel()">
+            </app-button>
+            <app-button 
+              variant="secondary" 
+              size="md"
+              icon="pi pi-file"
+              label="CSV"
+              (click)="exportCSV()">
+            </app-button>
           </div>
         </div>
       </div>

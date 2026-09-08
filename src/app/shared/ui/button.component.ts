@@ -76,7 +76,7 @@ export class ButtonComponent {
         classes += 'border border-[var(--line)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--brand)] hover:text-[var(--brand)] ';
         break;
       case 'danger':
-        classes += 'bg-rose-600 text-white hover:-translate-y-0.5 hover:bg-rose-700 ';
+        classes += 'bg-rose-600 text-white dark:bg-rose-700 hover:-translate-y-0.5 hover:bg-rose-700 dark:hover:bg-rose-600 ';
         break;
       case 'ghost':
         classes += 'bg-transparent text-[var(--ink-muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--ink)] ';

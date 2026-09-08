@@ -1,9 +1,9 @@
 <div class="min-h-screen bg-[var(--canvas)]">
   <app-header *ngIf="!isAuthPage"></app-header>
-  <div class="mx-auto flex min-h-[calc(100vh-4.5rem)] w-full max-w-[1720px]">
+  <div class="mx-auto flex min-h-[calc(100vh-4.5rem)] w-full">
     <app-sidebar *ngIf="!isAuthPage"></app-sidebar>
     <main class="min-w-0 flex-1 overflow-x-hidden">
-      <div class="mx-auto w-full max-w-[1500px] p-4 sm:p-7 xl:p-10">
+      <div class="w-full p-4 sm:p-7 xl:p-10">
         <router-outlet />
       </div>
     </main>

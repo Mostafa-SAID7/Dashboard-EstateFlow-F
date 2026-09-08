@@ -1,53 +1,53 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 import { Tenant } from '../../../models/tenant.model';
+import { ButtonComponent } from '../../../shared/ui/button.component';
+import { TooltipComponent } from '../../../shared/ui/tooltip.component';
 
 @Component({
   selector: 'app-tenant-list',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [CommonModule, ButtonComponent, TooltipComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="data-table">
-    <p-table [value]="tenants" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-          <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
-          <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th>
-          <th pSortableColumn="address.city">City <p-sortIcon field="address.city"></p-sortIcon></th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-tenant>
-        <tr>
-          <td>{{ tenant.name }}</td>
-          <td>{{ tenant.email }}</td>
-          <td>{{ tenant.phone }}</td>
-          <td>{{ tenant.address.city }}</td>
-          <td>
-            <p-button
-              icon="pi pi-eye"
-              [rounded]="true"
-              [text]="true"
-              severity="info"
-              (click)="viewTenant(tenant)"
-              pTooltip="View Details"
-              tooltipPosition="top">
-            </p-button>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="5" class="text-center py-4">
-            <p class="text-[var(--ink-muted)]">No tenants found</p>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-[var(--line)]">
+              <th class="px-4 py-3 text-left text-sm font-semibold text-[var(--ink)]">Name</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-[var(--ink)]">Email</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-[var(--ink)]">Phone</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-[var(--ink)]">City</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-[var(--ink)]">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tenant of tenants; let last = last" 
+                [ngClass]="!last ? 'border-b border-[var(--line)]' : ''">
+              <td class="px-4 py-3 text-sm text-[var(--ink)] font-medium">{{ tenant.name }}</td>
+              <td class="px-4 py-3 text-sm text-[var(--ink)]">{{ tenant.email }}</td>
+              <td class="px-4 py-3 text-sm text-[var(--ink)]">{{ tenant.phone }}</td>
+              <td class="px-4 py-3 text-sm text-[var(--ink)]">{{ tenant.address.city }}</td>
+              <td class="px-4 py-3">
+                <app-tooltip text="View tenant details" position="top">
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    icon="pi pi-eye"
+                    ariaLabel="View tenant details"
+                    (click)="viewTenant(tenant)">
+                  </app-button>
+                </app-tooltip>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="tenants.length === 0" class="py-12 text-center px-4">
+        <i class="pi pi-inbox text-4xl text-[var(--ink-muted)] mb-4 block"></i>
+        <p class="text-sm text-[var(--ink-muted)]">No tenants to display.</p>
+      </div>
     </div>
   `,
   styles: [`
