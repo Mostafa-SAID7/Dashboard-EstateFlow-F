@@ -161,6 +161,22 @@
     @apply bg-rose-600 text-white;
   }
 
+  .p-button.p-button-secondary {
+    @apply border border-[var(--line)] bg-[var(--surface)] text-[var(--ink)];
+  }
+
+  .p-button.p-button-secondary:hover {
+    @apply border-[var(--brand)] bg-[var(--surface-soft)] text-[var(--brand-dark)];
+  }
+
+  .p-button.p-button-text {
+    @apply bg-transparent text-[var(--ink-muted)];
+  }
+
+  .p-button.p-button-text:hover {
+    @apply bg-[var(--surface-muted)] text-[var(--ink)];
+  }
+
   .p-inputtext,
   .p-select,
   .p-dropdown,
@@ -181,6 +197,103 @@
   .p-select:not(.p-disabled).p-focus,
   textarea:focus {
     @apply border-[var(--brand)] ring-4 ring-[var(--ring)] outline-none;
+  }
+
+  .p-select {
+    @apply min-h-11 rounded-xl;
+  }
+
+  .p-select .p-select-label {
+    @apply px-4 py-2.5 text-sm text-[var(--ink)];
+  }
+
+  .p-select .p-select-label.p-placeholder {
+    @apply text-[var(--ink-muted)];
+  }
+
+  .p-select .p-select-dropdown {
+    @apply w-11 text-[var(--ink-muted)];
+  }
+
+  .p-select-overlay {
+    @apply z-[1000] mt-2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-1.5 shadow-[0_18px_45px_-22px_rgba(15,35,25,.45)];
+  }
+
+  .p-select-overlay .p-select-list {
+    @apply m-0 p-0;
+  }
+
+  .p-select-option {
+    @apply min-h-10 rounded-xl px-3 py-2 text-sm text-[var(--ink)] transition;
+  }
+
+  .p-select-option:not(.p-select-option-selected):not(.p-disabled):hover {
+    @apply bg-[var(--surface-muted)] text-[var(--ink)];
+  }
+
+  .p-select-option.p-select-option-selected {
+    @apply bg-[var(--brand-soft)] font-semibold text-[var(--brand-dark)];
+  }
+
+  .p-select-option.p-focus {
+    @apply bg-[var(--surface-muted)];
+  }
+
+  .p-select-overlay .p-select-empty-message {
+    @apply px-3 py-2 text-xs text-[var(--ink-muted)];
+  }
+
+  .p-dropdown-panel,
+  .p-multiselect-panel {
+    @apply z-[1000] mt-2 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-1.5 shadow-[0_18px_45px_-22px_rgba(15,35,25,.45)];
+  }
+
+  .p-dropdown-panel .p-dropdown-items,
+  .p-multiselect-panel .p-multiselect-items {
+    @apply m-0 p-0;
+  }
+
+  .p-dropdown-panel .p-dropdown-item,
+  .p-multiselect-panel .p-multiselect-item {
+    @apply rounded-xl px-3 py-2 text-sm text-[var(--ink)] transition;
+  }
+
+  .p-dropdown-panel .p-dropdown-item:not(.p-highlight):hover,
+  .p-multiselect-panel .p-multiselect-item:not(.p-highlight):hover {
+    @apply bg-[var(--surface-muted)];
+  }
+
+  .p-dropdown-panel .p-dropdown-item.p-highlight,
+  .p-multiselect-panel .p-multiselect-item.p-highlight {
+    @apply bg-[var(--brand-soft)] font-semibold text-[var(--brand-dark)];
+  }
+
+  select {
+    @apply appearance-none bg-[var(--surface-muted)] bg-[length:1rem] bg-[right_0.85rem_center] bg-no-repeat pr-10;
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink-muted) 50%), linear-gradient(135deg, var(--ink-muted) 50%, transparent 50%);
+    background-position: calc(100% - 1rem) 50%, calc(100% - .7rem) 50%;
+    background-size: .3rem .3rem, .3rem .3rem;
+    background-repeat: no-repeat;
+  }
+
+  option {
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .p-password,
+  .p-password .p-inputtext,
+  .p-password-input {
+    @apply w-full;
+  }
+
+  .p-password .p-inputtext,
+  .p-password-input {
+    @apply rounded-xl border-[var(--line)] bg-[var(--surface-muted)] text-[var(--ink)] shadow-none;
+  }
+
+  .p-password .p-password-toggle-mask-icon {
+    @apply text-[var(--ink-muted)];
   }
 
   .p-card,
@@ -218,6 +331,10 @@
     @apply bg-[var(--surface-muted)] px-5 py-3 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--ink-muted)];
   }
 
+  .p-datatable .p-datatable-thead > tr > th .p-sortable-column-icon {
+    @apply ml-1 text-[var(--ink-muted)];
+  }
+
   .p-datatable .p-datatable-tbody > tr > td {
     @apply px-5 py-4 text-xs;
   }
@@ -247,9 +364,25 @@
     @apply bg-[#f5e8c9] text-[#997219];
   }
 
+  .p-badge.p-badge-danger {
+    @apply bg-[#f5e0d9] text-[#a95d4e];
+  }
+
+  .p-badge {
+    @apply rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide;
+  }
+
   .p-select,
   .p-inputnumber,
   .p-inputnumber-input {
     @apply w-full;
+  }
+
+  .p-inputnumber {
+    @apply inline-flex;
+  }
+
+  .p-inputnumber .p-inputnumber-input {
+    @apply min-h-11;
   }
 }
