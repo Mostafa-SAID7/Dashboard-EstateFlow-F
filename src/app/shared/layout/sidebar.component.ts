@@ -23,18 +23,18 @@ interface NavItem {
       'w-[4.75rem]': isCollapsed(),
       'translate-x-0': isMobileSidebarOpen(),
       '-translate-x-full': !isMobileSidebarOpen()
-    }" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--line)] bg-[var(--surface)] transition-all duration-300 md:sticky md:top-[4.5rem] md:h-[calc(100vh-4.5rem)] md:translate-x-0">
-      <div class="hidden h-[4.5rem] shrink-0 items-center gap-3 border-b border-[var(--line)] px-5 md:flex" [class.justify-center]="isCollapsed()">
-        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand)] text-white shadow-sm"><i class="pi pi-building text-sm"></i></span>
-        <span *ngIf="!isCollapsed()" class="text-sm font-bold tracking-tight text-[var(--ink)]">Estate<span class="text-[var(--brand)]">Flow</span></span>
+      }" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--line)] bg-[var(--surface)] transition-all duration-300 md:sticky md:top-[5.25rem] md:h-[calc(100vh-5.25rem)] md:translate-x-0">
+      <div class="hidden h-[5.25rem] shrink-0 items-center gap-3 px-5 md:flex" [class.justify-center]="isCollapsed()">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-dark)] text-white shadow-sm"><i class="pi pi-chart-pie text-sm"></i></span>
+        <span *ngIf="!isCollapsed()" class="font-display text-sm font-bold tracking-tight text-[var(--ink)]">Estate<span class="text-[var(--brand)]">Flow</span></span>
       </div>
 
-      <nav class="flex-1 overflow-y-auto px-3 py-6">
+      <nav class="flex-1 overflow-y-auto px-4 py-7">
         <p *ngIf="!isCollapsed()" class="eyebrow mb-3 px-3">Workspace</p>
         <a *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }" (click)="closeMobileSidebar()" class="group relative mb-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)]" [class.justify-center]="isCollapsed()">
           <i [class]="getIconClass(item.icon) + ' w-5 text-center text-base'"></i>
           <span *ngIf="!isCollapsed()" class="truncate">{{ item.label }}</span>
-          <span *ngIf="item.badge && !isCollapsed()" class="ml-auto rounded-md bg-rose-100 px-1.5 py-0.5 text-[10px] font-bold text-rose-600 dark:bg-rose-950/50 dark:text-rose-300">{{ unreadCount$ | async }}</span>
+          <span *ngIf="item.badge && !isCollapsed()" class="ml-auto rounded-md bg-[var(--brand-dark)] px-1.5 py-0.5 text-[10px] font-bold text-white">{{ unreadCount$ | async }}</span>
           <span *ngIf="isCollapsed()" class="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-lg bg-[var(--ink)] px-2 py-1 text-xs text-white opacity-0 shadow-lg transition group-hover:opacity-100">{{ item.label }}</span>
         </a>
 
@@ -46,7 +46,7 @@ interface NavItem {
         </a>
       </nav>
 
-      <div class="border-t border-[var(--line)] p-3">
+      <div class="border-t border-[var(--line)] p-4">
         <div *ngIf="!isCollapsed()" class="mb-3 rounded-2xl bg-[var(--brand-dark)] p-4 text-white">
           <div class="mb-3 flex items-center justify-between"><i class="pi pi-sparkles text-sm text-emerald-200"></i><span class="text-[9px] font-bold uppercase tracking-widest text-emerald-200">Pro plan</span></div>
           <p class="text-xs font-medium leading-5 text-emerald-50">Unlock advanced portfolio insights.</p>
