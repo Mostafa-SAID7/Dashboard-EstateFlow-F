@@ -19,9 +19,6 @@ updates:
       include: 'scope'
     allow:
       - dependency-type: 'all'
-    ignore:
-      # Add any packages you want to ignore here
-      # - dependency-name: 'package-name'
     pull-request-branch-name:
       separator: '/'
     rebase-strategy: 'auto'
