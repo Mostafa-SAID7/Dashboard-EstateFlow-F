@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/Mostafa-SAID7/real-estate-platform/blob/main/docs/GETTING_STARTED.md
+    about: Read our getting started guide
+  - name: Architecture Guide
+    url: https://github.com/Mostafa-SAID7/real-estate-platform/blob/main/docs/ARCHITECTURE.md
+    about: Understand the project architecture
+  - name: Contributing Guidelines
+    url: https://github.com/Mostafa-SAID7/real-estate-platform/blob/main/docs/CONTRIBUTING.md
+    about: Learn how to contribute

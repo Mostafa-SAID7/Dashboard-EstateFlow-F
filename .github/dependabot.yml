@@ -1,0 +1,48 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+    open-pull-requests-limit: 10
+    reviewers:
+      - 'Mostafa-SAID7'
+    labels:
+      - 'dependencies'
+      - 'npm'
+    commit-message:
+      prefix: 'chore(deps):'
+      prefix-development: 'chore(deps-dev):'
+      include: 'scope'
+    allow:
+      - dependency-type: 'all'
+    ignore:
+      # Add any packages you want to ignore here
+      # - dependency-name: 'package-name'
+    pull-request-branch-name:
+      separator: '/'
+    rebase-strategy: 'auto'
+    target-branch: 'develop'
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '04:00'
+    open-pull-requests-limit: 5
+    reviewers:
+      - 'Mostafa-SAID7'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+    commit-message:
+      prefix: 'ci:'
+    pull-request-branch-name:
+      separator: '/'
+    rebase-strategy: 'auto'
+    target-branch: 'develop'

@@ -1,0 +1,26 @@
+# Global code ownership
+* @Mostafa-SAID7
+
+# Security and infrastructure
+/.github/ @Mostafa-SAID7
+/docs/SECURITY.md @Mostafa-SAID7
+SECURITY.md @Mostafa-SAID7
+
+# Configuration and build
+angular.json @Mostafa-SAID7
+tsconfig*.json @Mostafa-SAID7
+package.json @Mostafa-SAID7
+tailwind.config.js @Mostafa-SAID7
+postcss.config.js @Mostafa-SAID7
+
+# Source code
+/src/app/core/ @Mostafa-SAID7
+/src/app/features/ @Mostafa-SAID7
+/src/app/shared/ @Mostafa-SAID7
+
+# Documentation
+README.md @Mostafa-SAID7
+/docs/ @Mostafa-SAID7
+CHANGELOG.md @Mostafa-SAID7
+CONTRIBUTORS.md @Mostafa-SAID7
+LICENSE @Mostafa-SAID7

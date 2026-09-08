@@ -1,109 +1,330 @@
-# Contributing to Real Estate Platform
+# Contributing Guide
 
-Thank you for your interest in contributing to the Real Estate Analytics & Property Management Platform!
+Thank you for your interest in contributing to the Real Estate Platform! This guide will help you get started.
+
+## Code of Conduct
+
+We are committed to providing a welcoming and inclusive environment for all contributors. Please:
+- Be respectful and professional
+- Accept constructive criticism gracefully
+- Focus on collaboration over confrontation
 
 ## Getting Started
 
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/real-estate-platform.git`
-3. Create a feature branch: `git checkout -b feature/your-feature-name`
-4. Make your changes
-5. Commit your changes: `git commit -m "Add your feature"`
-6. Push to your fork: `git push origin feature/your-feature-name`
-7. Create a Pull Request
+### Prerequisites
+- Node.js 22.14.0 or higher
+- npm 10.5.0 or higher
+- Git
+- Angular CLI 18.2.21
 
-## Development Setup
-
-See the [Getting Started Guide](GETTING_STARTED.md) for detailed setup instructions.
-
-## Code Style
-
-### TypeScript
-- Use TypeScript strict mode
-- Follow Angular style guide
-- Use meaningful variable and function names
-- Add JSDoc comments for public APIs
-
-### Angular Components
-- Use standalone components
-- Use OnPush change detection strategy
-- Use signals for local state
-- Use NgRx for global state
-- Follow the single responsibility principle
-
-### CSS/Tailwind
-- Use Tailwind utility classes
-- Follow mobile-first approach
-- Ensure responsive design
-- Maintain accessibility standards
-
-## Commit Messages
-
-Follow the Conventional Commits specification:
-
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `style:` Code style changes (formatting, etc.)
-- `refactor:` Code refactoring
-- `test:` Adding or updating tests
-- `chore:` Maintenance tasks
-
-Examples:
-```
-feat: add property filtering by location
-fix: resolve memory leak in map component
-docs: update API integration guide
-```
-
-## Testing
-
-- Write unit tests for all new features
-- Ensure all tests pass before submitting PR
-- Maintain or improve code coverage
+### Setup Development Environment
 
 ```bash
-npm test
-npm test -- --code-coverage
+# Clone repository
+git clone https://github.com/Mostafa-SAID7/real-estate-platform.git
+cd real-estate-platform
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Run tests
+npm run test
+
+# Build for production
+npm run build
 ```
 
-## Pull Request Process
+## Workflow
 
-1. Update documentation if needed
-2. Add tests for new features
-3. Ensure all tests pass
-4. Update the README if needed
-5. Request review from maintainers
+### 1. Create Feature Branch
+```bash
+git checkout -b feature/my-feature
+# or
+git checkout -b fix/my-bug
+```
 
-## Code Review
+**Branch naming**:
+- `feature/description` - New features
+- `fix/description` - Bug fixes
+- `docs/description` - Documentation
+- `refactor/description` - Code improvements
+- `test/description` - Tests
 
-- Be respectful and constructive
-- Address all review comments
-- Keep PRs focused and small
-- Respond to feedback promptly
+### 2. Make Changes
 
-## Reporting Bugs
+Follow project conventions:
+- Use TypeScript strict mode
+- Follow Angular style guide
+- Use component-based architecture
+- Document complex logic
+- Write unit tests for new code
 
-Use GitHub Issues to report bugs. Include:
+### 3. Test Locally
 
-- Clear description of the issue
-- Steps to reproduce
-- Expected behavior
-- Actual behavior
-- Screenshots if applicable
-- Environment details (OS, browser, Node version)
+```bash
+# Run tests
+npm run test -- --watch=false
 
-## Feature Requests
+# Check code coverage
+npm run test -- --code-coverage
 
-Use GitHub Issues for feature requests. Include:
+# Build for production
+npm run build -- --configuration production
 
-- Clear description of the feature
-- Use case and benefits
-- Proposed implementation (optional)
+# Run linter (if available)
+npm run lint
+```
 
-## Questions?
+### 4. Commit Changes
 
-Feel free to open a GitHub Discussion or reach out to the maintainers.
+```bash
+git add .
+git commit -m "type(scope): description"
+```
+
+**Commit message format** (Conventional Commits):
+```
+<type>(<scope>): <description>
+
+<body>
+
+<footer>
+```
+
+**Types**:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation
+- `style`: Formatting, no code change
+- `refactor`: Code restructure
+- `perf`: Performance improvement
+- `test`: Adding/updating tests
+- `chore`: Dependencies, build, etc.
+- `ci`: CI/CD configuration
+
+**Examples**:
+```
+feat(dashboard): add real-time notifications
+fix(properties): resolve filter bug
+docs(auth): update authentication guide
+test(tenants): add unit tests for tenant service
+```
+
+### 5. Push & Create Pull Request
+
+```bash
+git push origin feature/my-feature
+```
+
+On GitHub:
+1. Create Pull Request
+2. Fill out PR template completely
+3. Reference related issues: `Closes #123`
+4. Ensure all checks pass
+
+### 6. Code Review
+
+- Respond to reviewer feedback
+- Make requested changes
+- Push updates (no force push)
+- Request re-review when ready
+
+### 7. Merge
+
+Once approved:
+- Merge with "Squash and merge" for clean history
+- Delete feature branch
+
+## Code Standards
+
+### TypeScript
+```typescript
+// ✅ Good
+const calculateROI = (revenue: number, expenses: number): number => {
+  if (expenses === 0) return 0;
+  return (revenue - expenses) / expenses;
+};
+
+// ❌ Bad
+const calc = (r, e) => (r - e) / e;  // Unclear naming
+```
+
+### Components
+```typescript
+// ✅ Good component structure
+@Component({
+  selector: 'app-property-card',
+  standalone: true,
+  imports: [CommonModule],
+  template: `...`,
+  styles: [`...`]
+})
+export class PropertyCardComponent {
+  @Input() property!: Property;
+  @Output() propertyClicked = new EventEmitter<Property>();
+}
+
+// ❌ Avoid: Not standalone, missing types
+```
+
+### Naming Conventions
+- **Classes**: PascalCase - `PropertyService`
+- **Functions**: camelCase - `calculateROI()`
+- **Constants**: UPPER_SNAKE_CASE - `MAX_PROPERTIES`
+- **Variables**: camelCase - `propertyCount`
+- **Files**: kebab-case - `property.service.ts`
+
+### File Structure
+```
+src/app/
+├── core/              # Singleton services
+├── features/          # Feature modules
+│   ├── dashboard/
+│   ├── properties/
+│   └── tenants/
+├── shared/            # Reusable components
+│   ├── components/
+│   ├── directives/
+│   ├── pipes/
+│   └── utils/
+└── models/            # TypeScript interfaces
+```
+
+### Testing
+
+Every new feature/fix should have tests:
+
+```typescript
+// ✅ Good test
+describe('PropertyService', () => {
+  let service: PropertyService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(PropertyService);
+  });
+
+  it('should calculate ROI correctly', () => {
+    const roi = service.calculateROI(1000, 800);
+    expect(roi).toBe(0.25);
+  });
+});
+```
+
+## Documentation
+
+### Code Comments
+```typescript
+// Good: Explain WHY
+// Using setTimeout to allow form to update before navigation
+setTimeout(() => {
+  this.router.navigate(['/properties']);
+}, 100);
+
+// Avoid: Explaining WHAT (code already shows this)
+// Increase timeout by 100ms
+setTimeout(() => {
+  this.router.navigate(['/properties']);
+}, 100);
+```
+
+### Update Documentation
+- Update README if adding features
+- Update API_INTEGRATION.md for API changes
+- Add JSDoc comments to public methods
+- Update CHANGELOG.md
+
+## Accessibility
+
+### WCAG 2.2 Level AA Compliance
+- ✅ Keyboard navigation support
+- ✅ ARIA labels where needed
+- ✅ Color contrast: 4.5:1 for text
+- ✅ Alt text for images
+- ✅ Proper heading hierarchy
+
+### Test Accessibility
+```bash
+# Manual testing with keyboard
+- Tab through interface
+- Ensure focus indicators visible
+- Test with screen reader (NVDA, JAWS, VoiceOver)
+```
+
+## Security
+
+### Before Committing
+- ✅ No hardcoded secrets
+- ✅ No API keys in code
+- ✅ Input validation implemented
+- ✅ XSS prevention
+- ✅ CSRF protection
+
+### Security Review
+- Mention security implications in PR
+- Reference SECURITY.md if applicable
+- Add security tests if needed
+
+## Performance
+
+### Optimization Guidelines
+- Lazy load routes
+- Use OnPush change detection
+- Implement virtual scrolling for lists
+- Optimize images
+- Tree-shake unused code
+- Monitor bundle size
+
+### Check Bundle Size
+```bash
+npm run build -- --configuration production
+# Check dist/real-estate-platform size
+```
+
+## Common Tasks
+
+### Add a New Component
+```bash
+ng generate component features/dashboard/kpi-card
+```
+
+### Add a New Service
+```bash
+ng generate service services/property
+```
+
+### Add a New Route
+Edit `src/app/app.routes.ts`:
+```typescript
+{
+  path: 'properties',
+  component: PropertiesComponent,
+  canActivate: [AuthGuard]
+}
+```
+
+### Update Dependencies
+```bash
+npm update                      # Update to latest compatible
+npm install package@latest      # Update to latest version
+```
+
+## Getting Help
+
+- **Questions**: Open a GitHub Discussion
+- **Bug Reports**: Open an Issue (use template)
+- **Security Issues**: Email security@...
+- **Documentation**: Check `/docs` folder
+
+## Recognition
+
+Contributors will be recognized in:
+- CONTRIBUTORS.md file
+- GitHub release notes
+- Project README (for major contributions)
 
 ## License
 
@@ -111,4 +332,4 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ---
 
-Thank you for contributing! 🎉
+Thank you for contributing! 🙏

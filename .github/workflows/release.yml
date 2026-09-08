@@ -1,0 +1,144 @@
+name: Automated Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (major.minor.patch)'
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  check-version:
+    name: Check Version Change
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      changed: ${{ steps.version.outputs.changed }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: version
+        run: |
+          NEW_VERSION=$(jq -r '.version' package.json)
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          OLD_VERSION="${LAST_TAG#v}"
+          
+          if [ "$NEW_VERSION" != "$OLD_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "version=v$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "Previous: $OLD_VERSION"
+            echo "Current: $NEW_VERSION"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No version change detected"
+          fi
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: check-version
+    if: needs.check-version.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+
+    strategy:
+      matrix:
+        node-version: ['22.14.0']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run quality checks
+        run: |
+          npm run test -- --watch=false --code-coverage
+          npm run build -- --configuration production
+
+      - name: Set version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          fi
+
+      - name: Get version
+        id: get-version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create git tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a ${{ steps.get-version.outputs.version }} -m "Release ${{ steps.get-version.outputs.version }}"
+          git push origin ${{ steps.get-version.outputs.version }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get-version.outputs.version }}
+          release_name: Release ${{ steps.get-version.outputs.version }}
+          body: |
+            # Release ${{ steps.get-version.outputs.version }}
+            
+            See [CHANGELOG.md](./CHANGELOG.md) for detailed changes.
+            
+            ## Installation
+            
+            ```bash
+            npm install @your-org/real-estate-platform@${{ steps.get-version.outputs.version }}
+            ```
+          draft: false
+          prerelease: false
+
+      - name: Publish to npm (optional)
+        continue-on-error: true
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm publish
+        if: secrets.NPM_TOKEN != ''
+
+  notify-release:
+    name: Notify Release
+    runs-on: ubuntu-latest
+    needs: [check-version, release]
+    if: success()
+
+    steps:
+      - name: Create release summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ needs.check-version.outputs.version }}';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Release ${version} published!\n\n📦 [Release Notes](https://github.com/${{ github.repository }}/releases/tag/${version})`
+            })
+        continue-on-error: true

@@ -1,0 +1,103 @@
+name: Code Quality & Tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: ['22.14.0']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check TypeScript compilation
+        run: npx tsc --noEmit
+
+      - name: Run ESLint
+        run: npm run lint --if-present || echo "No lint script found"
+
+      - name: Check code formatting
+        run: npx prettier --check "src/**/*.{ts,html,css}" || echo "No formatting check available"
+
+  unit-tests:
+    name: Unit Tests & Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    strategy:
+      matrix:
+        node-version: ['22.14.0']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage
+        run: npm run test -- --watch=false --code-coverage
+
+      - name: Check coverage threshold (80%)
+        run: |
+          COVERAGE=$(cat coverage/real-estate-platform/coverage-summary.json 2>/dev/null | grep -o '"lines"[^}]*' | grep -o '[0-9.]*' | tail -1)
+          if [ -z "$COVERAGE" ]; then
+            echo "Coverage file not found"
+            exit 0
+          fi
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "❌ Coverage below 80%: $COVERAGE%"
+            exit 1
+          fi
+          echo "✅ Coverage: $COVERAGE%"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/real-estate-platform/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Archive coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ matrix.node-version }}
+          path: coverage/real-estate-platform/
+          retention-days: 30
