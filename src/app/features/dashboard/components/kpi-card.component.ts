@@ -7,93 +7,60 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-200 border border-gray-200 dark:border-gray-700">
-      <div class="flex justify-between items-start">
-        <div>
-          <p class="text-gray-600 dark:text-gray-400 text-sm font-medium">{{ label }}</p>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ formattedValue }}</p>
-          <p class="text-sm mt-2" [ngClass]="trendClass">
-            <span [ngClass]="trendIconClass">{{ trendIcon }}</span>
-            {{ trendText }}
-          </p>
-        </div>
-        <div class="text-3xl" [ngClass]="iconColorClass">
-          {{ icon }}
-        </div>
+    <article class="surface-card group relative overflow-hidden p-5">
+      <div class="mb-6 flex items-start justify-between">
+        <p class="text-xs font-semibold text-[var(--ink-muted)]">{{ label }}</p>
+        <span class="flex h-9 w-9 items-center justify-center rounded-xl" [ngClass]="iconContainerClass">
+          <i [class]="icon + ' text-sm'"></i>
+        </span>
       </div>
-    </div>
-  `,
-  styles: [`
-    :host {
-      display: block;
-    }
-  `]
+      <p class="text-3xl font-bold tracking-tight text-[var(--ink)]">{{ formattedValue }}</p>
+      <div class="mt-3 flex items-center gap-1.5 text-[11px]" [ngClass]="trendClass">
+        <span class="flex h-4 w-4 items-center justify-center rounded-full bg-current/10"><i [class]="trendIconClass + ' text-[9px]'"></i></span>
+        <span>{{ trendText }}</span>
+      </div>
+      <div class="absolute -bottom-8 -right-8 h-24 w-24 rounded-full opacity-20 blur-2xl transition group-hover:opacity-40" [ngClass]="iconContainerClass"></div>
+    </article>
+  `
 })
 export class KpiCardComponent {
-  @Input() label: string = '';
-  @Input() value: number = 0;
-  @Input() icon: string = '';
-  @Input() trend: number = 0;
+  @Input() label = '';
+  @Input() value = 0;
+  @Input() icon = 'pi pi-chart-line';
+  @Input() trend = 0;
   @Input() format: 'number' | 'currency' | 'percent' = 'number';
-  @Input() borderColor: 'blue' | 'green' | 'orange' | 'red' = 'blue';
+  @Input() borderColor: 'blue' | 'green' | 'orange' | 'red' | 'purple' = 'blue';
 
   get formattedValue(): string {
-    switch (this.format) {
-      case 'currency':
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          maximumFractionDigits: 0
-        }).format(this.value);
-      case 'percent':
-        return `${this.value.toFixed(1)}%`;
-      default:
-        return new Intl.NumberFormat('en-US').format(this.value);
+    if (this.format === 'currency') {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(this.value);
     }
-  }
-
-  get trendIcon(): string {
-    if (this.trend > 0) return '↑';
-    if (this.trend < 0) return '↓';
-    return '→';
+    if (this.format === 'percent') return `${this.value.toFixed(1)}%`;
+    return new Intl.NumberFormat('en-US').format(this.value);
   }
 
   get trendText(): string {
-    const absValue = Math.abs(this.trend);
-    if (this.trend > 0) return `+${absValue.toFixed(1)}% vs last month`;
-    if (this.trend < 0) return `${absValue.toFixed(1)}% vs last month`;
-    return 'No change vs last month';
+    if (this.trend > 0) return `+${this.trend.toFixed(1)}% from last month`;
+    if (this.trend < 0) return `${Math.abs(this.trend).toFixed(1)}% from last month`;
+    return 'No change from last month';
   }
 
   get trendClass(): string {
-    if (this.trend > 0) return 'text-green-600 dark:text-green-400';
-    if (this.trend < 0) return 'text-red-600 dark:text-red-400';
-    return 'text-gray-600 dark:text-gray-400';
+    return this.trend >= 0 ? 'text-[var(--brand)]' : 'text-rose-600 dark:text-rose-300';
   }
 
   get trendIconClass(): string {
-    if (this.trend > 0) return 'text-green-600 dark:text-green-400';
-    if (this.trend < 0) return 'text-red-600 dark:text-red-400';
-    return 'text-gray-600 dark:text-gray-400';
+    return this.trend >= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down';
   }
 
-  get borderColorClass(): string {
-    const colorMap = {
-      blue: 'border-blue-500',
-      green: 'border-green-500',
-      orange: 'border-orange-500',
-      red: 'border-red-500'
+  get iconContainerClass(): string {
+    const colors = {
+      blue: 'bg-sky-100 text-sky-600 dark:bg-sky-950/40 dark:text-sky-300',
+      green: 'bg-[var(--brand-soft)] text-[var(--brand)]',
+      orange: 'bg-orange-100 text-orange-600 dark:bg-orange-950/40 dark:text-orange-300',
+      red: 'bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300',
+      purple: 'bg-purple-100 text-purple-600 dark:bg-purple-950/40 dark:text-purple-300'
     };
-    return colorMap[this.borderColor];
-  }
-
-  get iconColorClass(): string {
-    const colorMap = {
-      blue: 'text-blue-500',
-      green: 'text-green-500',
-      orange: 'text-orange-500',
-      red: 'text-red-500'
-    };
-    return colorMap[this.borderColor];
+    return colors[this.borderColor];
   }
 }

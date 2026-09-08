@@ -2,25 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  --canvas: #f6f7f4;
+  --surface: #ffffff;
+  --surface-muted: #f0f2ee;
+  --surface-soft: #fafbf9;
+  --ink: #17231d;
+  --ink-muted: #7b857d;
+  --line: #e6eae4;
+  --brand: #167653;
+  --brand-dark: #0d4f3a;
+  --brand-soft: #e2f2ea;
+  --ring: rgba(22, 118, 83, 0.2);
 }
 
-html {
-  scroll-behavior: smooth;
+.dark {
+  --canvas: #111815;
+  --surface: #18211d;
+  --surface-muted: #202c26;
+  --surface-soft: #1c2722;
+  --ink: #f4f7f4;
+  --ink-muted: #9daaa1;
+  --line: #2d3b33;
+  --brand: #4fbd8e;
+  --brand-dark: #2f9d70;
+  --brand-soft: #173d2f;
+  --ring: rgba(79, 189, 142, 0.25);
 }
 
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  @apply bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-200;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-[var(--canvas)] font-sans text-[var(--ink)] antialiased transition-colors duration-300;
+    margin: 0;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
+    @apply outline-none ring-2 ring-[var(--brand)] ring-offset-2 ring-offset-[var(--canvas)];
+  }
 }
 
-/* Scrollbar Styling */
+@layer components {
+  .surface-card {
+    @apply rounded-2xl border border-[var(--line)] bg-[var(--surface)] shadow-sm transition-colors duration-300;
+  }
+
+  .surface-muted {
+    @apply bg-[var(--surface-muted)] text-[var(--ink)];
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--brand-dark)] hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-4 py-2.5 text-sm font-semibold text-[var(--ink)] transition hover:border-[var(--brand)] hover:text-[var(--brand)];
+  }
+
+  .input-field {
+    @apply rounded-xl border border-[var(--line)] bg-[var(--surface)] px-4 py-2.5 text-sm text-[var(--ink)] placeholder:text-[var(--ink-muted)] transition focus:border-[var(--brand)] focus:outline-none focus:ring-4 focus:ring-[var(--ring)];
+  }
+
+  .eyebrow {
+    @apply text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--ink-muted)];
+  }
+
+  .icon-button {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-xl text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)];
+  }
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -31,334 +98,45 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(209, 213, 219);
-  border-radius: 4px;
-  border: 2px solid transparent;
-  background-clip: content-box;
+  @apply rounded-full bg-[#c9d0c9] dark:bg-[#3a4a40];
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(156, 163, 175);
-  background-clip: content-box;
-}
-
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-thumb {
-  background-color: rgb(55, 65, 81);
-  background-clip: content-box;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(75, 85, 99);
-  background-clip: content-box;
-}
-
-/* Firefox scrollbar */
-* {
-  scrollbar-color: rgb(209, 213, 219) transparent;
-  scrollbar-width: thin;
-}
-
-.dark * {
-  scrollbar-color: rgb(55, 65, 81) transparent;
-}
-
-/* Smooth transitions */
-@layer components {
-  .transition-smooth {
-    @apply transition-all duration-300 ease-in-out;
-  }
-
-  .btn-primary {
-    @apply px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors font-medium;
-  }
-
-  .btn-secondary {
-    @apply px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium;
-  }
-
-  .card {
-    @apply bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-lg transition-colors;
-  }
-
-  .input-field {
-    @apply px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors;
-  }
-}
-
-/* Animation utilities */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInFromTop {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInFromRight {
-  from {
-    opacity: 0;
-    transform: translateX(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInFromBottom {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.2s ease-in-out;
-}
-
-.animate-slide-in-top {
-  animation: slideInFromTop 0.2s ease-out;
-}
-
-.animate-slide-in-left {
-  animation: slideInFromLeft 0.2s ease-out;
-}
-
-.animate-slide-in-right {
-  animation: slideInFromRight 0.2s ease-out;
-}
-
-.animate-slide-in-bottom {
-  animation: slideInFromBottom 0.2s ease-out;
-}
-
-/* Date Picker Calendar Styling */
-input[type="date"] {
-  color-scheme: light dark;
-}
-
-/* Calendar picker icon styling */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  border-radius: 4px;
-  margin-right: 2px;
-  opacity: 0.6;
-  filter: invert(0.8);
-  transition: opacity 0.2s ease;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-}
-
-/* Dark mode calendar styling */
-@media (prefers-color-scheme: dark) {
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-  }
-}
-
-/* Calendar popup styling for Chrome/Edge */
-input[type="date"]::-webkit-datetime-edit {
-  padding: 0;
-}
-
-input[type="date"]::-webkit-datetime-edit-fields-wrapper {
-  padding: 0;
-}
-
-input[type="date"]::-webkit-datetime-edit-text {
-  color: inherit;
-  padding: 0 0.2em;
-}
-
-input[type="date"]::-webkit-datetime-edit-month-field,
-input[type="date"]::-webkit-datetime-edit-day-field,
-input[type="date"]::-webkit-datetime-edit-year-field {
-  color: inherit;
-  padding: 0;
-}
-
-/* Firefox date input styling */
-input[type="date"] {
-  appearance: textfield;
-}
-
-input[type="date"]::-moz-calendar-picker-indicator {
-  cursor: pointer;
-  border-radius: 4px;
-  margin-right: 2px;
-  opacity: 0.6;
-  filter: invert(0.8);
-  transition: opacity 0.2s ease;
-}
-
-input[type="date"]::-moz-calendar-picker-indicator:hover {
-  opacity: 1;
-}
-
-/* Sidebar Scrollbar Hiding */
-aside.w-20 {
-  overflow: hidden !important;
-}
-
-aside.w-20::-webkit-scrollbar {
-  display: none;
-}
-
-aside.w-20 {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Header and Sidebar Animations */
-@keyframes slideInFromTop {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-in {
-  animation: slideInFromTop 0.2s ease-out;
+  animation: fadeIn 0.35s ease-out both;
 }
 
-/* Scrollbar Styling for Sidebar */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgb(209, 213, 219);
-  border-radius: 3px;
-}
-
-.dark .scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgb(55, 65, 81);
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(156, 163, 175);
-}
-
-.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(75, 85, 99);
-}
-
-/* PrimeNG Tailwind Integration */
+/* PrimeNG inherits the product tokens instead of introducing a second theme. */
 @layer components {
-  /* PrimeNG Button Styling */
   .p-button {
-    @apply transition-colors duration-200;
+    @apply rounded-xl transition;
   }
 
-  .p-button.p-button-primary {
-    @apply bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700;
+  .p-inputtext,
+  .p-select,
+  .p-dropdown {
+    @apply border-[var(--line)] bg-[var(--surface)] text-[var(--ink)];
   }
 
-  .p-button.p-button-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600;
+  .p-card,
+  .p-dialog .p-dialog-header,
+  .p-dialog .p-dialog-content {
+    @apply border-[var(--line)] bg-[var(--surface)] text-[var(--ink)];
   }
 
-  /* PrimeNG Input Styling */
-  .p-inputtext {
-    @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700;
-  }
-
-  .p-inputtext:focus {
-    @apply ring-2 ring-blue-500 dark:ring-blue-400;
-  }
-
-  /* PrimeNG Select Styling */
-  .p-select {
-    @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700;
-  }
-
-  /* PrimeNG Card Styling */
-  .p-card {
-    @apply bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700;
-  }
-
-  /* PrimeNG Table Styling */
   .p-datatable {
-    @apply bg-white dark:bg-gray-800;
+    @apply overflow-hidden rounded-2xl bg-[var(--surface)];
   }
 
   .p-datatable .p-datatable-thead > tr > th {
-    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700;
-  }
-
-  .p-datatable .p-datatable-tbody > tr {
-    @apply border-gray-200 dark:border-gray-700;
+    @apply border-[var(--line)] bg-[var(--surface-muted)] text-[var(--ink)];
   }
 
   .p-datatable .p-datatable-tbody > tr > td {
-    @apply text-gray-900 dark:text-white;
-  }
-
-  /* PrimeNG Dialog Styling */
-  .p-dialog .p-dialog-header {
-    @apply bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700;
-  }
-
-  .p-dialog .p-dialog-content {
-    @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white;
-  }
-
-  /* PrimeNG Message Styling */
-  .p-message {
-    @apply bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700;
-  }
-
-  .p-message.p-message-info {
-    @apply bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800;
-  }
-
-  .p-message.p-message-success {
-    @apply bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800;
-  }
-
-  .p-message.p-message-warning {
-    @apply bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800;
-  }
-
-  .p-message.p-message-error {
-    @apply bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800;
+    @apply border-[var(--line)] text-[var(--ink)];
   }
 }

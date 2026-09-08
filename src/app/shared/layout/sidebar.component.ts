@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -18,130 +18,95 @@ interface NavItem {
   imports: [CommonModule, RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <aside 
-      [ngClass]="{
-        'w-64': !isCollapsed(),
-        'w-20': isCollapsed(),
-        'dark:bg-gray-900': isDarkMode(),
-        'bg-white': !isDarkMode(),
-        'hidden md:block': !isMobileSidebarOpen(),
-        'block': isMobileSidebarOpen()
-      }"
-      class="fixed md:sticky left-0 top-16 md:top-16 h-[calc(100vh-4rem)] transition-all duration-300 border-r border-gray-200 dark:border-gray-800 shadow-sm dark:shadow-lg scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent z-30 flex flex-col overflow-hidden">
-      
-      <!-- Navigation Menu -->
-      <nav class="flex-1 space-y-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-        <a 
-          *ngFor="let item of navItems"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: false }"
-          (click)="closeMobileSidebar()"
-          [ngClass]="{
-            'bg-blue-50 dark:bg-gray-800 text-blue-600 dark:text-blue-400': isActive(item.route),
-            'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800': !isActive(item.route)
-          }"
-          class="flex items-center gap-3 px-3 py-2.5 transition-all duration-200 group relative">
-          
-          <!-- Icon -->
-          <span class="flex-shrink-0 w-5 h-5 flex items-center justify-center">
-            <i *ngIf="item.icon === 'dashboard'" class="pi pi-home w-5 h-5"></i>
-            <i *ngIf="item.icon === 'properties'" class="pi pi-building w-5 h-5"></i>
-            <i *ngIf="item.icon === 'tenants'" class="pi pi-users w-5 h-5"></i>
-            <i *ngIf="item.icon === 'map'" class="pi pi-map w-5 h-5"></i>
-            <i *ngIf="item.icon === 'financial'" class="pi pi-dollar w-5 h-5"></i>
-            <i *ngIf="item.icon === 'work-orders'" class="pi pi-check-square w-5 h-5"></i>
-            <i *ngIf="item.icon === 'reports'" class="pi pi-file w-5 h-5"></i>
-            <i *ngIf="item.icon === 'notifications'" class="pi pi-bell w-5 h-5"></i>
-          </span>
+    <aside [ngClass]="{
+      'w-64': !isCollapsed(),
+      'w-[4.75rem]': isCollapsed(),
+      'translate-x-0': isMobileSidebarOpen(),
+      '-translate-x-full': !isMobileSidebarOpen()
+    }" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--line)] bg-[var(--surface)] transition-all duration-300 md:sticky md:top-[4.5rem] md:h-[calc(100vh-4.5rem)] md:translate-x-0">
+      <div class="hidden h-[4.5rem] shrink-0 items-center gap-3 border-b border-[var(--line)] px-5 md:flex" [class.justify-center]="isCollapsed()">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--brand)] text-white shadow-sm"><i class="pi pi-building text-sm"></i></span>
+        <span *ngIf="!isCollapsed()" class="text-sm font-bold tracking-tight text-[var(--ink)]">Estate<span class="text-[var(--brand)]">Flow</span></span>
+      </div>
 
-          <!-- Label -->
-          <span *ngIf="!isCollapsed()" class="text-sm font-medium truncate">{{ item.label }}</span>
+      <nav class="flex-1 overflow-y-auto px-3 py-6">
+        <p *ngIf="!isCollapsed()" class="eyebrow mb-3 px-3">Workspace</p>
+        <a *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }" (click)="closeMobileSidebar()" class="group relative mb-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)]" [class.justify-center]="isCollapsed()">
+          <i [class]="getIconClass(item.icon) + ' w-5 text-center text-base'"></i>
+          <span *ngIf="!isCollapsed()" class="truncate">{{ item.label }}</span>
+          <span *ngIf="item.badge && !isCollapsed()" class="ml-auto rounded-md bg-rose-100 px-1.5 py-0.5 text-[10px] font-bold text-rose-600 dark:bg-rose-950/50 dark:text-rose-300">{{ unreadCount$ | async }}</span>
+          <span *ngIf="isCollapsed()" class="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-lg bg-[var(--ink)] px-2 py-1 text-xs text-white opacity-0 shadow-lg transition group-hover:opacity-100">{{ item.label }}</span>
+        </a>
 
-          <!-- Badge -->
-          <span 
-            *ngIf="item.badge && (unreadCount$ | async) as count"
-            [ngClass]="{'hidden': isCollapsed()}"
-            class="ml-auto flex-shrink-0 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200">
-            {{ count }}
-          </span>
-
-          <!-- Tooltip for collapsed state -->
-          <div *ngIf="isCollapsed()" class="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            {{ item.label }}
-          </div>
+        <p *ngIf="!isCollapsed()" class="eyebrow mb-3 mt-8 px-3">Manage</p>
+        <a *ngFor="let item of secondaryItems" [routerLink]="item.route" routerLinkActive="nav-active" class="group relative mb-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)]" [class.justify-center]="isCollapsed()">
+          <i [class]="getIconClass(item.icon) + ' w-5 text-center text-base'"></i>
+          <span *ngIf="!isCollapsed()" class="truncate">{{ item.label }}</span>
+          <span *ngIf="isCollapsed()" class="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-lg bg-[var(--ink)] px-2 py-1 text-xs text-white opacity-0 shadow-lg transition group-hover:opacity-100">{{ item.label }}</span>
         </a>
       </nav>
 
-      <!-- Footer with Theme Toggle -->
-      <div class="flex-shrink-0 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hidden md:block">
-        <button 
-          (click)="toggleDarkMode()"
-          [ngClass]="{
-            'bg-blue-50 dark:bg-gray-800 text-blue-600 dark:text-blue-400': isDarkMode(),
-            'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800': !isDarkMode()
-          }"
-          class="w-full flex items-center gap-3 px-3 py-2.5 transition-all duration-200">
-          <i *ngIf="!isDarkMode()" class="pi pi-sun w-5 h-5"></i>
-          <i *ngIf="isDarkMode()" class="pi pi-moon w-5 h-5"></i>
-          <span *ngIf="!isCollapsed()" class="text-sm font-medium">{{ isDarkMode() ? 'Light' : 'Dark' }}</span>
+      <div class="border-t border-[var(--line)] p-3">
+        <div *ngIf="!isCollapsed()" class="mb-3 rounded-2xl bg-[var(--brand-dark)] p-4 text-white">
+          <div class="mb-3 flex items-center justify-between"><i class="pi pi-sparkles text-sm text-emerald-200"></i><span class="text-[9px] font-bold uppercase tracking-widest text-emerald-200">Pro plan</span></div>
+          <p class="text-xs font-medium leading-5 text-emerald-50">Unlock advanced portfolio insights.</p>
+          <button class="mt-3 text-xs font-bold text-white underline decoration-emerald-300 underline-offset-4">Upgrade now</button>
+        </div>
+        <button (click)="toggleSidebar()" class="hidden w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)] md:flex" [class.justify-center]="isCollapsed()">
+          <i [class]="isCollapsed() ? 'pi pi-angle-right' : 'pi pi-angle-left'"></i>
+          <span *ngIf="!isCollapsed()">Collapse menu</span>
         </button>
       </div>
     </aside>
+    <div *ngIf="isMobileSidebarOpen()" (click)="closeMobileSidebar()" class="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm md:hidden"></div>
   `
 })
 export class SidebarComponent {
   private store = inject(Store);
   private sidebarService = inject(SidebarService);
-
   isCollapsed = this.sidebarService.isSidebarCollapsed;
-  isDarkMode = signal<boolean>(this.getInitialDarkMode());
   isMobileSidebarOpen = this.sidebarService.isMobileSidebarOpen;
+  isDarkMode = signal(false);
   unreadCount$ = this.store.select(selectUnreadCount);
 
   navItems: NavItem[] = [
     { label: 'Dashboard', route: '/dashboard', icon: 'dashboard' },
     { label: 'Properties', route: '/properties', icon: 'properties' },
     { label: 'Tenants', route: '/tenants', icon: 'tenants' },
-    { label: 'Map', route: '/map', icon: 'map' },
-    { label: 'Financial', route: '/financial-analytics', icon: 'financial' },
-    { label: 'Work Orders', route: '/work-orders', icon: 'work-orders' },
+    { label: 'Map view', route: '/map', icon: 'map' }
+  ];
+  secondaryItems: NavItem[] = [
+    { label: 'Financials', route: '/financial-analytics', icon: 'financial' },
+    { label: 'Work orders', route: '/work-orders', icon: 'work-orders' },
     { label: 'Reports', route: '/reporting', icon: 'reports' },
     { label: 'Notifications', route: '/notifications', icon: 'notifications', badge: true }
   ];
 
   constructor() {
-    // Apply dark mode on initialization
     effect(() => {
-      if (this.isDarkMode()) {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      }
+      this.isDarkMode.set(document.documentElement.classList.contains('dark'));
     });
+  }
+
+  toggleSidebar(): void {
+    this.sidebarService.toggleSidebarCollapse(!this.isCollapsed());
   }
 
   closeMobileSidebar(): void {
     this.sidebarService.closeMobileSidebar();
   }
 
-  toggleDarkMode(): void {
-    this.isDarkMode.update(v => !v);
-  }
-
-  isActive(route: string): boolean {
-    // This would be better with router state, but for now we'll use a simple check
-    return false;
-  }
-
-  private getInitialDarkMode(): boolean {
-    const saved = localStorage.getItem('theme');
-    if (saved) {
-      return saved === 'dark';
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  getIconClass(icon: string): string {
+    const icons: Record<string, string> = {
+      dashboard: 'pi pi-th-large',
+      properties: 'pi pi-building',
+      tenants: 'pi pi-users',
+      map: 'pi pi-map-marker',
+      financial: 'pi pi-chart-line',
+      'work-orders': 'pi pi-wrench',
+      reports: 'pi pi-file',
+      notifications: 'pi pi-bell'
+    };
+    return icons[icon] ?? 'pi pi-circle';
   }
 }
-

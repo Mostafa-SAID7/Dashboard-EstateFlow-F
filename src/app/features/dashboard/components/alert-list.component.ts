@@ -18,48 +18,23 @@ export interface Alert {
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-200">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Critical Alerts</h3>
-        <span class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs font-semibold px-3 py-1 rounded-full">
-          {{ alerts.length }}
-        </span>
+    <section class="surface-card p-5 sm:p-6">
+      <div class="mb-5 flex items-center justify-between">
+        <div><h2 class="text-base font-bold text-[var(--ink)]">Needs your attention</h2><p class="mt-1 text-xs text-[var(--ink-muted)]">Stay on top of important portfolio updates</p></div>
+        <span class="rounded-lg bg-rose-100 px-2.5 py-1 text-[10px] font-bold text-rose-600 dark:bg-rose-950/40 dark:text-rose-300">{{ alerts.length }} open</span>
       </div>
-
-      <div *ngIf="alerts.length === 0" class="text-center py-8">
-        <p class="text-gray-500 dark:text-gray-400">No critical alerts at this time</p>
+      <div *ngIf="alerts.length === 0" class="flex items-center gap-3 rounded-xl bg-[var(--surface-muted)] px-4 py-3 text-sm text-[var(--ink-muted)]">
+        <i class="pi pi-check-circle text-[var(--brand)]"></i> Everything looks good for now.
       </div>
-
-      <div *ngIf="alerts.length > 0" class="space-y-3">
-        <div *ngFor="let alert of alerts" 
-             class="flex items-start p-4 rounded-lg border-l-4 transition-colors duration-200"
-             [ngClass]="getSeverityClass(alert.severity)">
-          <div class="flex-shrink-0 mr-3">
-            <span class="text-xl" [ngClass]="getIconClass(alert.type)">
-              {{ getIcon(alert.type) }}
-            </span>
-          </div>
-          <div class="flex-1">
-            <h4 class="font-semibold text-gray-900 dark:text-white">{{ alert.title }}</h4>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ alert.message }}</p>
-            <p *ngIf="alert.propertyAddress" class="text-xs text-gray-500 dark:text-gray-500 mt-1">
-              {{ alert.propertyAddress }}
-            </p>
-          </div>
-          <button (click)="dismissAlert(alert.id)"
-                  class="flex-shrink-0 ml-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                  aria-label="Dismiss alert">
-            ✕
-          </button>
+      <div *ngIf="alerts.length > 0" class="grid gap-3 md:grid-cols-2">
+        <div *ngFor="let alert of alerts" class="flex items-start gap-3 rounded-xl border border-rose-100 bg-rose-50/70 p-3 dark:border-rose-900/40 dark:bg-rose-950/20">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-300"><i class="pi pi-exclamation-triangle text-xs"></i></span>
+          <div class="min-w-0 flex-1"><p class="text-sm font-semibold text-[var(--ink)]">{{ alert.title }}</p><p class="mt-1 text-xs text-[var(--ink-muted)]">{{ alert.message }}</p><p *ngIf="alert.propertyAddress" class="mt-1 truncate text-[10px] text-[var(--ink-muted)]">{{ alert.propertyAddress }}</p></div>
+          <button (click)="dismissAlert(alert.id)" class="text-[var(--ink-muted)] transition hover:text-[var(--ink)]" aria-label="Dismiss alert"><i class="pi pi-times text-xs"></i></button>
         </div>
       </div>
-    </div>
-  `,
-  styles: [`
-    :host {
-      display: block;
-    }
-  `]
+    </section>
+  `
 })
 export class AlertListComponent {
   @Input() alerts: Alert[] = [];
@@ -67,34 +42,5 @@ export class AlertListComponent {
 
   dismissAlert(alertId: string): void {
     this.alertDismissed.emit(alertId);
-  }
-
-  getSeverityClass(severity: string): string {
-    const classMap = {
-      critical: 'bg-red-50 dark:bg-red-900/20 border-red-500 dark:border-red-600',
-      warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 dark:border-yellow-600',
-      info: 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 dark:border-blue-600'
-    };
-    return classMap[severity as keyof typeof classMap] || classMap.info;
-  }
-
-  getIcon(type: string): string {
-    const iconMap = {
-      occupancy: '🏢',
-      maintenance: '🔧',
-      payment: '💰',
-      lease: '📋'
-    };
-    return iconMap[type as keyof typeof iconMap] || '⚠️';
-  }
-
-  getIconClass(type: string): string {
-    const classMap = {
-      occupancy: 'text-orange-500',
-      maintenance: 'text-red-500',
-      payment: 'text-yellow-500',
-      lease: 'text-blue-500'
-    };
-    return classMap[type as keyof typeof classMap] || 'text-gray-500';
   }
 }
