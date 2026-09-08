@@ -1,20 +1,11 @@
-<div class="flex flex-col min-h-screen bg-white dark:bg-gray-950 transition-colors duration-200">
-  <!-- Header -->
+<div class="min-h-screen bg-[var(--canvas)]">
   <app-header *ngIf="!isAuthPage"></app-header>
-  
-  <!-- Main Layout: Sidebar + Content -->
-  <div class="flex flex-1 overflow-hidden">
-    <!-- Sidebar (Fixed on mobile, Sticky on desktop) -->
+  <div class="flex min-h-[calc(100vh-4.5rem)]">
     <app-sidebar *ngIf="!isAuthPage"></app-sidebar>
-    
-    <!-- Main Content Area -->
-    <main class="flex-1 overflow-y-auto w-full">
-      <div class="p-4 md:p-6">
+    <main class="min-w-0 flex-1 overflow-x-hidden">
+      <div class="mx-auto w-full max-w-[1600px] p-4 sm:p-6 xl:p-8">
         <router-outlet />
       </div>
     </main>
   </div>
-  
-  <!-- Footer -->
-  <app-footer *ngIf="!isAuthPage"></app-footer>
 </div>

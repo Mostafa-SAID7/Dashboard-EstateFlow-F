@@ -10,118 +10,51 @@ import { SidebarService } from '../../services/sidebar.service';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <header class="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm dark:shadow-lg transition-colors duration-200 h-16">
-      <div class="h-full px-4 md:px-6 py-4 flex justify-between items-center gap-4">
-        <!-- Left Section: Logo, Brand, and Collapse Icon -->
-        <div class="flex items-center gap-3">
-          <!-- Mobile Menu Toggle -->
-          <button 
-            (click)="toggleMobileSidebar()"
-            class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors"
-            [title]="'Toggle Menu'">
-            <i class="pi pi-bars w-6 h-6"></i>
-          </button>
+    <header class="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--surface)]/95 backdrop-blur-xl">
+      <div class="flex h-[4.5rem] items-center gap-3 px-4 sm:px-6 xl:px-8">
+        <button (click)="toggleMobileSidebar()" class="icon-button md:hidden" aria-label="Open navigation">
+          <i class="pi pi-bars text-lg"></i>
+        </button>
 
-          <!-- Logo and Brand (Desktop) -->
-          <div class="hidden md:flex items-center gap-2">
-            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
-              <span class="text-white font-bold text-sm">RE</span>
-            </div>
-            <span class="text-sm font-bold text-gray-900 dark:text-white">Estate</span>
-          </div>
+        <a routerLink="/dashboard" class="flex shrink-0 items-center gap-2.5 md:hidden">
+          <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--brand)] text-white shadow-sm">
+            <i class="pi pi-building text-sm"></i>
+          </span>
+          <span class="text-sm font-bold tracking-tight text-[var(--ink)]">Estate<span class="text-[var(--brand)]">Flow</span></span>
+        </a>
 
-          <!-- Collapse Icon (Desktop) -->
-          <button 
-            (click)="toggleSidebar()" 
-            class="hidden md:block p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors"
-            [title]="isSidebarCollapsed() ? 'Expand' : 'Collapse'">
-            <i *ngIf="!isSidebarCollapsed()" class="pi pi-chevron-left w-5 h-5"></i>
-            <i *ngIf="isSidebarCollapsed()" class="pi pi-chevron-right w-5 h-5"></i>
-          </button>
+        <div class="relative hidden max-w-xl flex-1 md:block">
+          <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--ink-muted)]"></i>
+          <input class="input-field h-11 w-full pl-11 pr-20" type="search" placeholder="Search properties, tenants, reports..." aria-label="Search" />
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md border border-[var(--line)] bg-[var(--surface-muted)] px-2 py-1 text-[10px] font-semibold text-[var(--ink-muted)]">⌘ K</span>
         </div>
 
-        <!-- Center Section: Search (hidden on mobile) -->
-        <div class="hidden md:flex flex-1 max-w-md">
-          <div class="relative w-full">
-            <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-            <input 
-              type="text" 
-              placeholder="Search..." 
-              class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors text-sm">
-          </div>
-        </div>
-
-        <!-- Right Section -->
-        <div class="flex items-center gap-2 md:gap-6 ml-auto">
-          <!-- Language Selector (hidden on mobile) -->
-          <select 
-            (change)="changeLanguage($event)" 
-            class="hidden md:block px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm font-medium hover:border-gray-400 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors cursor-pointer">
-            <option value="en">English</option>
-            <option value="ar">العربية</option>
-          </select>
-
-          <!-- Dark Mode Toggle -->
-          <button 
-            (click)="toggleDarkMode()"
-            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors"
-            [title]="isDarkMode() ? 'Light Mode' : 'Dark Mode'">
-            <i *ngIf="!isDarkMode()" class="pi pi-sun w-5 h-5"></i>
-            <i *ngIf="isDarkMode()" class="pi pi-moon w-5 h-5"></i>
+        <div class="ml-auto flex items-center gap-1.5 sm:gap-3">
+          <button class="icon-button hidden sm:inline-flex" title="Help" aria-label="Help"><i class="pi pi-question-circle"></i></button>
+          <button class="icon-button relative" title="Notifications" aria-label="Notifications">
+            <i class="pi pi-bell"></i>
+            <span class="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-rose-500 ring-2 ring-[var(--surface)]"></span>
           </button>
-
-          <!-- Notifications Icon -->
-          <button class="relative p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            <i class="pi pi-bell w-5 h-5"></i>
-            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          <button (click)="toggleDarkMode()" class="icon-button hidden sm:inline-flex" [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'" aria-label="Toggle color mode">
+            <i [class]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"></i>
           </button>
-
-          <!-- User Profile Dropdown -->
+          <div class="mx-1 hidden h-7 w-px bg-[var(--line)] sm:block"></div>
           <div class="relative">
-            <button 
-              (click)="toggleProfileMenu()" 
-              class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-              <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md">
-                {{ userInitial() }}
-              </div>
-              <div class="hidden md:block text-left">
-                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ userName() }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">Admin</p>
-              </div>
-              <i class="hidden md:block pi pi-chevron-down w-4 h-4 text-gray-600 dark:text-gray-400"></i>
+            <button (click)="toggleProfileMenu()" class="flex items-center gap-2 rounded-xl p-1.5 transition hover:bg-[var(--surface-muted)]" aria-label="Open profile menu">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#f2c5b7] text-xs font-bold text-[#673b35]">JD</span>
+              <span class="hidden text-left sm:block">
+                <span class="block text-xs font-semibold text-[var(--ink)]">{{ userName() }}</span>
+                <span class="block text-[10px] text-[var(--ink-muted)]">Administrator</span>
+              </span>
+              <i class="pi pi-chevron-down hidden text-[10px] text-[var(--ink-muted)] sm:block"></i>
             </button>
-
-            <!-- Profile Dropdown Menu -->
-            <div 
-              *ngIf="showProfileMenu()" 
-              class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-              
-              <!-- User Info -->
-              <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ userName() }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">admin&#64;realestate.com</p>
+            <div *ngIf="showProfileMenu()" class="animate-in absolute right-0 top-12 z-50 w-56 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-2 shadow-xl">
+              <div class="border-b border-[var(--line)] px-3 pb-3 pt-2">
+                <p class="text-sm font-semibold text-[var(--ink)]">{{ userName() }}</p>
+                <p class="mt-0.5 text-xs text-[var(--ink-muted)]">admin&#64;estateflow.com</p>
               </div>
-
-              <!-- Menu Items -->
-              <a href="/profile" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                <i class="pi pi-user w-4 h-4"></i>
-                <span class="text-sm">Profile</span>
-              </a>
-              <a href="/settings" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                <i class="pi pi-cog w-4 h-4"></i>
-                <span class="text-sm">Settings</span>
-              </a>
-
-              <!-- Divider -->
-              <div class="border-t border-gray-200 dark:border-gray-700"></div>
-
-              <!-- Logout -->
-              <button 
-                (click)="logout()" 
-                class="w-full flex items-center gap-3 px-4 py-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left">
-                <i class="pi pi-sign-out w-4 h-4"></i>
-                <span class="text-sm font-medium">Logout</span>
-              </button>
+              <a href="/settings" class="mt-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[var(--ink)] transition hover:bg-[var(--surface-muted)]"><i class="pi pi-cog text-[var(--ink-muted)]"></i> Settings</a>
+              <button (click)="logout()" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-rose-600 transition hover:bg-rose-50 dark:hover:bg-rose-950/30"><i class="pi pi-sign-out"></i> Sign out</button>
             </div>
           </div>
         </div>
@@ -134,49 +67,19 @@ export class HeaderComponent {
   private router = inject(Router);
   private sidebarService = inject(SidebarService);
 
-  showProfileMenu = signal<boolean>(false);
-  isDarkMode = signal<boolean>(this.getInitialDarkMode());
-  isSidebarCollapsed = signal<boolean>(false);
-  userName = signal<string>('John Doe');
-  userInitial = signal<string>('JD');
+  showProfileMenu = signal(false);
+  isDarkMode = signal(this.getInitialDarkMode());
+  userName = signal('John Doe');
 
   constructor() {
-    // Apply dark mode on initialization
     effect(() => {
-      if (this.isDarkMode()) {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      }
-    });
-
-    // Close menu when clicking outside
-    effect(() => {
-      if (this.showProfileMenu()) {
-        const handleClickOutside = (e: MouseEvent) => {
-          const target = e.target as HTMLElement;
-          if (!target.closest('[role="button"]') && !target.closest('.relative')) {
-            this.showProfileMenu.set(false);
-          }
-        };
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-          document.removeEventListener('click', handleClickOutside);
-        };
-      }
-      return undefined;
+      document.documentElement.classList.toggle('dark', this.isDarkMode());
+      localStorage.setItem('theme', this.isDarkMode() ? 'dark' : 'light');
     });
   }
 
   toggleProfileMenu(): void {
-    this.showProfileMenu.update(v => !v);
-  }
-
-  toggleSidebar(): void {
-    this.isSidebarCollapsed.update(v => !v);
-    this.sidebarService.toggleSidebarCollapse(this.isSidebarCollapsed());
+    this.showProfileMenu.update(value => !value);
   }
 
   toggleMobileSidebar(): void {
@@ -184,13 +87,7 @@ export class HeaderComponent {
   }
 
   toggleDarkMode(): void {
-    this.isDarkMode.update(v => !v);
-  }
-
-  changeLanguage(event: Event): void {
-    const language = (event.target as HTMLSelectElement).value;
-    localStorage.setItem('language', language);
-    window.location.reload();
+    this.isDarkMode.update(value => !value);
   }
 
   logout(): void {
@@ -200,10 +97,6 @@ export class HeaderComponent {
 
   private getInitialDarkMode(): boolean {
     const saved = localStorage.getItem('theme');
-    if (saved) {
-      return saved === 'dark';
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 }
-
