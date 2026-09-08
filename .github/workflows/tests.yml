@@ -69,7 +69,7 @@ jobs:
         run: npm ci
 
       - name: Run unit tests with coverage
-        run: npm run test -- --watch=false --code-coverage --browsers=ChromeHeadlessCI
+        run: npm run test -- --watch=false --code-coverage --browsers=ChromeHeadless
 
       - name: Check coverage threshold (80%)
         run: |

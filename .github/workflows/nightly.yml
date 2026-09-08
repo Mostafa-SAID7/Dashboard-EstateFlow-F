@@ -34,7 +34,7 @@ jobs:
         run: npm ci
 
       - name: Run all tests with coverage
-        run: npm run test -- --watch=false --code-coverage --browsers=ChromeHeadlessCI
+        run: npm run test -- --watch=false --code-coverage --browsers=ChromeHeadless
 
       - name: Build production
         run: npm run build -- --configuration production

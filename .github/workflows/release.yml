@@ -74,7 +74,7 @@ jobs:
 
       - name: Run quality checks
         run: |
-          npm run test -- --watch=false --code-coverage --browsers=ChromeHeadlessCI
+          npm run test -- --watch=false --code-coverage --browsers=ChromeHeadless
           npm run build -- --configuration production
 
       - name: Set version
