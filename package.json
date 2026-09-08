@@ -27,7 +27,6 @@
     "@angular/router": "^18.2.0",
     "@ngrx/effects": "^18.1.1",
     "@ngrx/store": "^18.1.1",
-    "@rollup/rollup-linux-x64-gnu": "^4.63.1",
     "chart.js": "^4.5.1",
     "leaflet": "^1.9.4",
     "primeicons": "^7.0.0",
