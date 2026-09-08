@@ -1,4 +1,4 @@
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { RealtimeService } from './realtime.service';
 import { environment } from '../../environments/environment';
 
@@ -365,6 +365,9 @@ describe('RealtimeService', () => {
 
       // Should attempt to reconnect
       expect(window.WebSocket).toHaveBeenCalledTimes(2);
+      
+      // Cleanup pending timers
+      flush();
     }));
   });
 
