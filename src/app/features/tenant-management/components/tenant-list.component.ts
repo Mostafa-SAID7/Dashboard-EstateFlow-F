@@ -10,7 +10,7 @@ import { Tenant } from '../../../models/tenant.model';
   imports: [CommonModule, TableModule, ButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="surface-card overflow-hidden">
+    <div class="data-table">
     <p-table [value]="tenants" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template pTemplate="header">
         <tr>

@@ -7,10 +7,10 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <footer class="bg-gray-900 text-gray-300 py-4 mt-12">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center text-sm">
-          <p>&copy; 2024 Real Estate Analytics Platform. All rights reserved.</p>
+    <footer class="mt-12 border-t border-[var(--line)] bg-[var(--surface)] py-5 text-[var(--ink-muted)]">
+      <div class="mx-auto max-w-[1500px] px-6">
+        <div class="text-center text-xs">
+          <p>&copy; 2024 EstateFlow. All rights reserved.</p>
         </div>
       </div>
     </footer>

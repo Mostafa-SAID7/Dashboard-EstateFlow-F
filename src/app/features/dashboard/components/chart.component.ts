@@ -8,8 +8,8 @@ import Chart from 'chart.js/auto';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-200">
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{{ title }}</h3>
+    <div class="dashboard-card">
+      <h3 class="mb-4 text-base font-bold text-[var(--ink)]">{{ title }}</h3>
       <div class="relative h-80">
         <canvas #chartCanvas></canvas>
       </div>
