@@ -16,22 +16,19 @@ import { MessageModule } from 'primeng/message';
   imports: [CommonModule, FormsModule, TenantListComponent, InputTextModule, ButtonModule, MessageModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-200">
+    <div class="animate-in space-y-6">
       <!-- Header -->
-      <div class="flex justify-between items-start mb-8">
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Tenant Management</h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-2">Manage all tenants and their information</p>
+          <p class="eyebrow mb-2">People & leases</p>
+          <h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Tenants</h1>
+          <p class="mt-1 text-sm text-[var(--ink-muted)]">Keep resident records and lease activity organized.</p>
         </div>
-        <p-button
-          label="+ Add Tenant"
-          icon="pi pi-plus"
-          (click)="addTenant()">
-        </p-button>
+        <button (click)="addTenant()" class="btn-primary"><i class="pi pi-plus text-xs"></i> Add tenant</button>
       </div>
 
       <!-- Search and Filters -->
-      <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md dark:shadow-lg p-4 mb-6 border border-gray-200 dark:border-gray-800 transition-colors duration-200">
+      <div class="dashboard-card">
         <span class="p-input-icon-left w-full">
           <i class="pi pi-search"></i>
           <input pInputText
@@ -39,9 +36,9 @@ import { MessageModule } from 'primeng/message';
             placeholder="Search by name, email, or city..."
             [(ngModel)]="searchQuery"
             (ngModelChange)="onSearchChange($event)"
-            class="w-full">
+            class="input-field w-full pl-10">
         </span>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+        <p class="mt-3 text-xs text-[var(--ink-muted)]">
           Showing {{ filteredTenants().length }} of {{ tenants().length }} tenants
         </p>
       </div>
@@ -55,11 +52,7 @@ import { MessageModule } from 'primeng/message';
       </div>
 
       <ng-template #noTenants>
-        <p-message
-          severity="info"
-          text="No tenants found. Start by adding a new tenant to your portfolio."
-          [styleClass]="'w-full'">
-        </p-message>
+        <div class="dashboard-card flex flex-col items-center justify-center py-16 text-center"><span class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)]"><i class="pi pi-users"></i></span><p class="text-sm font-semibold text-[var(--ink)]">No tenants found</p><p class="mt-1 text-xs text-[var(--ink-muted)]">Start by adding a new tenant to your portfolio.</p></div>
       </ng-template>
     </div>
   `,

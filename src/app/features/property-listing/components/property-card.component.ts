@@ -11,58 +11,58 @@ import { Property } from '../../../models/property.model';
   imports: [CommonModule, FormsModule, CheckboxModule, BadgeModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 overflow-hidden cursor-pointer border border-gray-200 dark:border-gray-700"
+    <div class="surface-card group cursor-pointer overflow-hidden transition hover:-translate-y-0.5 hover:shadow-[0_18px_35px_-25px_rgba(8,50,35,.45)]"
          (click)="selectProperty()">
       <!-- Image -->
-      <div class="relative h-48 bg-gray-200 dark:bg-gray-700 overflow-hidden">
+      <div class="relative h-48 overflow-hidden bg-[var(--surface-muted)]">
         <img *ngIf="property.photos && property.photos.length > 0"
              [src]="property.photos[0]?.url"
              alt="Property"
-             class="w-full h-full object-cover">
+              class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
         <div *ngIf="!property.photos || property.photos.length === 0"
-             class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-600">
-          <span class="text-4xl">🏠</span>
+             class="flex h-full w-full items-center justify-center text-[var(--ink-muted)]">
+          <i class="pi pi-building text-3xl"></i>
         </div>
         
         <!-- Status Badge -->
         <div class="absolute top-3 right-3">
-          <p-badge [value]="property.status | titlecase" [severity]="getStatusSeverity()"></p-badge>
+           <span class="rounded-full bg-[var(--surface)]/90 px-3 py-1 text-[10px] font-bold text-[var(--brand-dark)] shadow-sm dark:text-[var(--brand)]">{{ property.status | titlecase }}</span>
         </div>
       </div>
 
       <!-- Content -->
-      <div class="p-4">
+       <div class="p-5">
         <!-- Address -->
-        <h3 class="font-semibold text-gray-900 dark:text-white truncate">
+         <h3 class="truncate text-sm font-bold text-[var(--ink)]">
           {{ property.address.street }}
         </h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
+         <p class="text-xs text-[var(--ink-muted)]">
           {{ property.address.city }}, {{ property.address.state }}
         </p>
 
         <!-- Property Details -->
         <div class="grid grid-cols-2 gap-2 mt-3 text-sm">
           <div>
-            <p class="text-gray-600 dark:text-gray-400">Type</p>
-            <p class="font-semibold text-gray-900 dark:text-white">{{ property.type | titlecase }}</p>
+             <p class="text-[10px] text-[var(--ink-muted)]">Type</p>
+             <p class="text-xs font-semibold text-[var(--ink)]">{{ property.type | titlecase }}</p>
           </div>
           <div>
-            <p class="text-gray-600 dark:text-gray-400">Size</p>
-            <p class="font-semibold text-gray-900 dark:text-white">{{ property.sizeSqft | number }} sqft</p>
+             <p class="text-[10px] text-[var(--ink-muted)]">Size</p>
+             <p class="text-xs font-semibold text-[var(--ink)]">{{ property.sizeSqft | number }} sqft</p>
           </div>
         </div>
 
         <!-- Financial Metrics -->
-        <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 text-sm">
+         <div class="mt-4 grid grid-cols-2 gap-2 border-t border-[var(--line)] pt-4 text-sm">
           <div>
-            <p class="text-gray-600 dark:text-gray-400">Monthly Revenue</p>
-            <p class="font-semibold text-green-600 dark:text-green-400">
+             <p class="text-[10px] text-[var(--ink-muted)]">Monthly Revenue</p>
+             <p class="text-xs font-bold text-[var(--brand)]">
               {{ property.monthlyRevenue | currency }}
             </p>
           </div>
           <div>
-            <p class="text-gray-600 dark:text-gray-400">ROI</p>
-            <p class="font-semibold" [ngClass]="property.roi >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+             <p class="text-[10px] text-[var(--ink-muted)]">ROI</p>
+             <p class="text-xs font-bold" [ngClass]="property.roi >= 0 ? 'text-[var(--brand)]' : 'text-rose-600 dark:text-rose-300'">
               {{ property.roi | number: '1.1-1' }}%
             </p>
           </div>
@@ -76,7 +76,7 @@ import { Property } from '../../../models/property.model';
             (click)="$event.stopPropagation()"
             [binary]="true">
           </p-checkbox>
-          <label class="ml-2 text-sm text-gray-600 dark:text-gray-400">Select for bulk action</label>
+           <label class="ml-2 text-[10px] text-[var(--ink-muted)]">Select for bulk action</label>
         </div>
       </div>
     </div>

@@ -1,9 +1,8 @@
-<div class="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-200">
-  <div class="max-w-7xl mx-auto">
+<div class="animate-in space-y-6">
     <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Reports</h1>
-      <p class="text-gray-600 dark:text-gray-400 mt-2">Generate and manage reports</p>
+    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div><p class="eyebrow mb-2">Insights & exports</p><h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Reports</h1><p class="mt-1 text-sm text-[var(--ink-muted)]">Turn portfolio activity into clear, useful decisions.</p></div>
+      <span class="rounded-full bg-[var(--brand-soft)] px-3 py-1.5 text-[10px] font-bold text-[var(--brand)]"><i class="pi pi-file mr-2"></i>Report center</span>
     </div>
 
     <!-- Report Templates -->
@@ -20,5 +19,4 @@
 
     <!-- Report History -->
     <app-report-history></app-report-history>
-  </div>
 </div>

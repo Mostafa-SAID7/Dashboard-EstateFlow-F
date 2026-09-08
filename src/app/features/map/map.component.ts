@@ -10,57 +10,57 @@ import * as L from 'leaflet';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-200">
+    <div class="animate-in space-y-6">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Property Map</h1>
-        <p class="text-gray-600 dark:text-gray-400 mt-2">View all properties on an interactive map</p>
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div><p class="eyebrow mb-2">Portfolio overview</p><h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Property map</h1><p class="mt-1 text-sm text-[var(--ink-muted)]">Explore your portfolio geographically.</p></div>
+        <span class="rounded-full bg-[var(--brand-soft)] px-3 py-1.5 text-[10px] font-bold text-[var(--brand)]">{{ properties().length }} properties</span>
       </div>
 
       <!-- Controls -->
-      <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md dark:shadow-lg p-4 mb-6 flex gap-4 border border-gray-200 dark:border-gray-800 transition-colors duration-200 flex-wrap">
+      <div class="dashboard-card flex flex-wrap gap-2">
         <button (click)="toggleMarkerView()"
-                class="px-4 py-2 rounded-md transition-colors"
-                [ngClass]="viewMode() === 'markers' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700'">
-          Markers
+                 class="rounded-full px-4 py-2 text-xs font-semibold transition"
+                 [ngClass]="viewMode() === 'markers' ? 'bg-[var(--brand-dark)] text-white' : 'border border-[var(--line)] text-[var(--ink-muted)] hover:text-[var(--ink)]'">
+           <i class="pi pi-map-marker mr-2"></i>Markers
         </button>
         <button (click)="toggleHeatmapView()"
-                class="px-4 py-2 rounded-md transition-colors"
-                [ngClass]="viewMode() === 'heatmap' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700'">
-          Heatmap
+                 class="rounded-full px-4 py-2 text-xs font-semibold transition"
+                 [ngClass]="viewMode() === 'heatmap' ? 'bg-[var(--brand-dark)] text-white' : 'border border-[var(--line)] text-[var(--ink-muted)] hover:text-[var(--ink)]'">
+           <i class="pi pi-chart-bar mr-2"></i>Heatmap
         </button>
         <button (click)="centerMap()"
-                class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">
-          Center Map
+                 class="btn-secondary !px-4 !py-2 !text-xs">
+           <i class="pi pi-compass mr-2"></i>Center map
         </button>
       </div>
 
       <!-- Map Container -->
-      <div #mapContainer class="bg-white dark:bg-gray-900 rounded-lg shadow-md dark:shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800 transition-colors duration-200" style="height: 600px;">
+      <div #mapContainer class="surface-card overflow-hidden" style="height: 600px;">
         <!-- Map will be rendered here -->
       </div>
 
       <!-- Selected Property Info -->
-      <div *ngIf="selectedProperty()" class="mt-6 bg-white dark:bg-gray-900 rounded-lg shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-800 transition-colors duration-200">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Selected Property</h3>
+       <div *ngIf="selectedProperty()" class="dashboard-card">
+         <h3 class="mb-4 text-base font-bold text-[var(--ink)]">Selected property</h3>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Address</p>
-            <p class="font-semibold text-gray-900 dark:text-white">{{ selectedProperty()!.address.street }}</p>
+             <p class="eyebrow">Address</p>
+             <p class="mt-1 text-sm font-semibold text-[var(--ink)]">{{ selectedProperty()!.address.street }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
-            <p class="font-semibold" [ngClass]="selectedProperty()!.status === 'active' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+             <p class="eyebrow">Status</p>
+             <p class="mt-1 text-sm font-semibold" [ngClass]="selectedProperty()!.status === 'active' ? 'text-[var(--brand)]' : 'text-rose-600 dark:text-rose-300'">
               {{ selectedProperty()!.status | titlecase }}
             </p>
           </div>
           <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Monthly Revenue</p>
-            <p class="font-semibold text-green-600 dark:text-green-400">{{ selectedProperty()!.monthlyRevenue | currency }}</p>
+             <p class="eyebrow">Monthly revenue</p>
+             <p class="mt-1 text-sm font-semibold text-[var(--brand)]">{{ selectedProperty()!.monthlyRevenue | currency }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">ROI</p>
-            <p class="font-semibold text-gray-900 dark:text-white">{{ selectedProperty()!.roi | number: '1.1-1' }}%</p>
+             <p class="eyebrow">ROI</p>
+             <p class="mt-1 text-sm font-semibold text-[var(--ink)]">{{ selectedProperty()!.roi | number: '1.1-1' }}%</p>
           </div>
         </div>
       </div>

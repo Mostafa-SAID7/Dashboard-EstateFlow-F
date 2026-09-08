@@ -10,7 +10,8 @@ import { Tenant } from '../../../models/tenant.model';
   imports: [CommonModule, TableModule, ButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <p-table [value]="tenants" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+    <div class="surface-card overflow-hidden">
+    <p-table [value]="tenants" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
@@ -42,11 +43,12 @@ import { Tenant } from '../../../models/tenant.model';
       <ng-template pTemplate="emptymessage">
         <tr>
           <td colspan="5" class="text-center py-4">
-            <p class="text-gray-500 dark:text-gray-400">No tenants found</p>
+            <p class="text-[var(--ink-muted)]">No tenants found</p>
           </td>
         </tr>
       </ng-template>
     </p-table>
+    </div>
   `,
   styles: [`
     :host {
