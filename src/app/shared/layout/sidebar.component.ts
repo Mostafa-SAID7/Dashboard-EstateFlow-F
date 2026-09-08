@@ -58,7 +58,7 @@ interface NavItem {
         </button>
       </div>
     </aside>
-    <div *ngIf="isMobileSidebarOpen()" (click)="closeMobileSidebar()" class="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm md:hidden"></div>
+    <div *ngIf="isMobileSidebarOpen()" (click)="closeMobileSidebar()" class="fixed inset-0 z-40 bg-[var(--ink)]/40 backdrop-blur-sm md:hidden"></div>
   `
 })
 export class SidebarComponent {

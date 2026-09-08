@@ -106,7 +106,7 @@ import { TooltipModule } from 'primeng/tooltip';
         </p-dialog>
 
         <!-- Work Orders List -->
-        <div class="surface-card overflow-hidden">
+        <div class="data-table">
         <p-table [value]="(workOrders$ | async) || []" [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template pTemplate="header">
             <tr>

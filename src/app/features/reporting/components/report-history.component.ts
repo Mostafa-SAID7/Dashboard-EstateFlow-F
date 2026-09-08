@@ -15,7 +15,7 @@ interface ReportRecord {
   imports: [CommonModule, TableModule, ButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="surface-card overflow-hidden">
+    <div class="data-table">
     <div class="border-b border-[var(--line)] px-5 py-4"><p class="eyebrow">Archive</p><h2 class="mt-1 text-base font-bold text-[var(--ink)]">Report history</h2></div>
     <p-table [value]="reports" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template pTemplate="header">

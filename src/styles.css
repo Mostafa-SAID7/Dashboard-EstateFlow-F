@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --canvas: #f0f2ef;
+  --canvas: #f4f5f3;
   --surface: #ffffff;
-  --surface-muted: #f5f6f4;
+  --surface-muted: #f7f8f6;
   --surface-soft: #fbfcfb;
   --ink: #121916;
-  --ink-muted: #8b948e;
-  --line: #e8ebe8;
-  --brand: #16825e;
-  --brand-dark: #07513a;
-  --brand-soft: #e4f2ec;
-  --accent: #f3d7ce;
+  --ink-muted: #89938d;
+  --line: #e9ece9;
+  --brand: #18865f;
+  --brand-dark: #07563e;
+  --brand-soft: #e4f3ec;
+  --accent: #f3d8cf;
   --ring: rgba(22, 130, 94, 0.2);
 }
 
@@ -44,7 +44,7 @@
   body {
     @apply min-h-screen bg-[var(--canvas)] font-sans text-[var(--ink)] antialiased transition-colors duration-300;
     margin: 0;
-    background-image: radial-gradient(circle at 10% 0%, rgba(255,255,255,.75), transparent 28rem);
+    background-image: radial-gradient(circle at 10% 0%, rgba(255,255,255,.8), transparent 30rem);
   }
 
   button,
@@ -63,7 +63,7 @@
 
 @layer components {
   .surface-card {
-    @apply rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_8px_28px_-24px_rgba(15,35,25,.5)] transition-all duration-300;
+    @apply rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_12px_30px_-26px_rgba(15,35,25,.6)] transition-all duration-300;
   }
 
   .surface-muted {
@@ -71,7 +71,7 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-[var(--brand-dark)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_20px_-12px_var(--brand-dark)] transition hover:-translate-y-0.5 hover:bg-[var(--brand)] hover:shadow-lg;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-[var(--brand-dark)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_22px_-14px_var(--brand-dark)] transition hover:-translate-y-0.5 hover:bg-[var(--brand)] hover:shadow-lg;
   }
 
   .btn-secondary {
@@ -96,6 +96,14 @@
 
   .nav-active {
     @apply bg-[var(--brand-soft)] font-semibold text-[var(--brand-dark)] dark:text-[var(--brand)];
+  }
+
+  .page-heading {
+    @apply font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)];
+  }
+
+  .data-table {
+    @apply overflow-hidden rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)];
   }
 }
 
@@ -124,30 +132,124 @@
 /* PrimeNG inherits the product tokens instead of introducing a second theme. */
 @layer components {
   .p-button {
-    @apply rounded-xl transition;
+    @apply rounded-full border-0 transition;
+  }
+
+  .p-button:not(.p-button-text):not(.p-button-outlined) {
+    @apply bg-[var(--brand-dark)] text-white;
+  }
+
+  .p-button:not(.p-button-text):not(.p-button-outlined):hover {
+    @apply bg-[var(--brand)];
+  }
+
+  .p-button.p-button-info,
+  .p-button.p-button-success {
+    @apply bg-[var(--brand-dark)] text-white;
+  }
+
+  .p-button.p-button-info:hover,
+  .p-button.p-button-success:hover {
+    @apply bg-[var(--brand)];
+  }
+
+  .p-button.p-button-warn {
+    @apply bg-[#c28a31] text-white;
+  }
+
+  .p-button.p-button-danger {
+    @apply bg-rose-600 text-white;
   }
 
   .p-inputtext,
   .p-select,
-  .p-dropdown {
-    @apply border-[var(--line)] bg-[var(--surface)] text-[var(--ink)];
+  .p-dropdown,
+  .p-inputnumber-input,
+  .p-textarea,
+  textarea {
+    @apply rounded-xl border-[var(--line)] bg-[var(--surface-muted)] text-[var(--ink)] shadow-none;
+  }
+
+  .p-inputtext::placeholder,
+  .p-inputnumber-input::placeholder,
+  textarea::placeholder {
+    @apply text-[var(--ink-muted)];
+  }
+
+  .p-inputtext:enabled:focus,
+  .p-inputnumber-input:enabled:focus,
+  .p-select:not(.p-disabled).p-focus,
+  textarea:focus {
+    @apply border-[var(--brand)] ring-4 ring-[var(--ring)] outline-none;
   }
 
   .p-card,
   .p-dialog .p-dialog-header,
   .p-dialog .p-dialog-content {
-    @apply border-[var(--line)] bg-[var(--surface)] text-[var(--ink)];
+    @apply border-[var(--line)] bg-[var(--surface)] text-[var(--ink)] shadow-none;
+  }
+
+  .p-dialog {
+    @apply overflow-hidden rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)] shadow-2xl;
+  }
+
+  .p-dialog .p-dialog-header {
+    @apply px-6 py-5 font-display;
+  }
+
+  .p-dialog .p-dialog-content {
+    @apply px-6 pb-6;
   }
 
   .p-datatable {
-    @apply overflow-hidden rounded-2xl bg-[var(--surface)];
+    @apply overflow-hidden bg-[var(--surface)];
+  }
+
+  .p-datatable .p-datatable-table {
+    @apply w-full;
+  }
+
+  .p-datatable .p-datatable-thead > tr > th,
+  .p-datatable .p-datatable-tbody > tr > td {
+    @apply border-[var(--line)] text-[var(--ink)];
   }
 
   .p-datatable .p-datatable-thead > tr > th {
-    @apply border-[var(--line)] bg-[var(--surface-muted)] text-[var(--ink)];
+    @apply bg-[var(--surface-muted)] px-5 py-3 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--ink-muted)];
   }
 
   .p-datatable .p-datatable-tbody > tr > td {
-    @apply border-[var(--line)] text-[var(--ink)];
+    @apply px-5 py-4 text-xs;
+  }
+
+  .p-datatable .p-datatable-tbody > tr {
+    @apply bg-[var(--surface)] transition-colors;
+  }
+
+  .p-datatable .p-datatable-tbody > tr:hover {
+    @apply bg-[var(--surface-soft)];
+  }
+
+  .p-checkbox .p-checkbox-box {
+    @apply rounded-md border-[var(--line)] bg-[var(--surface)] transition;
+  }
+
+  .p-checkbox.p-checkbox-checked .p-checkbox-box {
+    @apply border-[var(--brand-dark)] bg-[var(--brand-dark)];
+  }
+
+  .p-badge.p-badge-info,
+  .p-badge.p-badge-success {
+    @apply bg-[var(--brand-soft)] text-[var(--brand-dark)];
+  }
+
+  .p-badge.p-badge-warning {
+    @apply bg-[#f5e8c9] text-[#997219];
+  }
+
+  .p-select,
+  .p-inputnumber,
+  .p-inputnumber-input {
+    @apply w-full;
   }
 }

@@ -55,11 +55,11 @@ export class KpiCardComponent {
 
   get iconContainerClass(): string {
     const colors = {
-      blue: 'bg-sky-100 text-sky-600 dark:bg-sky-950/40 dark:text-sky-300',
+      blue: 'bg-[var(--brand-soft)] text-[var(--brand)]',
       green: 'bg-[var(--brand-soft)] text-[var(--brand)]',
-      orange: 'bg-orange-100 text-orange-600 dark:bg-orange-950/40 dark:text-orange-300',
-      red: 'bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300',
-      purple: 'bg-purple-100 text-purple-600 dark:bg-purple-950/40 dark:text-purple-300'
+      orange: 'bg-[#f5e8c9] text-[#997219]',
+      red: 'bg-[#f5e0d9] text-[#b56855]',
+      purple: 'bg-[#eee4f5] text-[#7f56ad]'
     };
     return colors[this.borderColor];
   }
