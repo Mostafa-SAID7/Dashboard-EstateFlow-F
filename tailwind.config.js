@@ -39,7 +39,8 @@ module.exports = {
         info: '#3b82f6',
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Manrope', 'DM Sans', 'ui-sans-serif', 'sans-serif'],
       },
       spacing: {
         '128': '32rem',

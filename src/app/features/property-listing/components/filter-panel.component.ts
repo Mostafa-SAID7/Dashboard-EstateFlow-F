@@ -19,18 +19,18 @@ export interface PropertyFilters {
   imports: [CommonModule, FormsModule, InputNumberModule, CheckboxModule, ButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md dark:shadow-lg p-6 border border-gray-200 dark:border-gray-800 transition-colors duration-200">
+    <div class="dashboard-card">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Filters</h3>
+        <h3 class="text-sm font-bold text-[var(--ink)]">Filters</h3>
         <button (click)="clearFilters()"
-                class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+                 class="text-xs font-bold text-[var(--brand)] hover:underline">
           Clear All
         </button>
       </div>
 
       <!-- Price Range -->
       <fieldset class="border-0 p-0 m-0 mb-6">
-        <legend class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price Range</legend>
+         <legend class="eyebrow mb-2">Price range</legend>
         <div class="flex flex-col sm:flex-row gap-2">
           <p-inputNumber
             [(ngModel)]="minPrice"
@@ -49,7 +49,7 @@ export interface PropertyFilters {
 
       <!-- Property Type -->
       <fieldset class="border-0 p-0 m-0 mb-6">
-        <legend class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Property Type</legend>
+         <legend class="eyebrow mb-3">Property type</legend>
         <div class="space-y-2">
           <div class="flex items-center">
             <p-checkbox
@@ -57,7 +57,7 @@ export interface PropertyFilters {
               value="residential"
               [binary]="false">
             </p-checkbox>
-            <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Residential</label>
+             <label class="ml-2 text-xs text-[var(--ink-muted)]">Residential</label>
           </div>
           <div class="flex items-center">
             <p-checkbox
@@ -65,7 +65,7 @@ export interface PropertyFilters {
               value="commercial"
               [binary]="false">
             </p-checkbox>
-            <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Commercial</label>
+             <label class="ml-2 text-xs text-[var(--ink-muted)]">Commercial</label>
           </div>
           <div class="flex items-center">
             <p-checkbox
@@ -73,14 +73,14 @@ export interface PropertyFilters {
               value="mixed-use"
               [binary]="false">
             </p-checkbox>
-            <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Mixed-Use</label>
+             <label class="ml-2 text-xs text-[var(--ink-muted)]">Mixed-Use</label>
           </div>
         </div>
       </fieldset>
 
       <!-- Occupancy Status -->
       <fieldset class="border-0 p-0 m-0 mb-6">
-        <legend class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Occupancy Status</legend>
+         <legend class="eyebrow mb-3">Occupancy status</legend>
         <div class="space-y-2">
           <div class="flex items-center">
             <p-checkbox
@@ -88,7 +88,7 @@ export interface PropertyFilters {
               value="occupied"
               [binary]="false">
             </p-checkbox>
-            <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Occupied</label>
+             <label class="ml-2 text-xs text-[var(--ink-muted)]">Occupied</label>
           </div>
           <div class="flex items-center">
             <p-checkbox
@@ -96,7 +96,7 @@ export interface PropertyFilters {
               value="vacant"
               [binary]="false">
             </p-checkbox>
-            <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Vacant</label>
+             <label class="ml-2 text-xs text-[var(--ink-muted)]">Vacant</label>
           </div>
           <div class="flex items-center">
             <p-checkbox
@@ -104,7 +104,7 @@ export interface PropertyFilters {
               value="maintenance"
               [binary]="false">
             </p-checkbox>
-            <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Maintenance</label>
+             <label class="ml-2 text-xs text-[var(--ink-muted)]">Maintenance</label>
           </div>
         </div>
       </fieldset>

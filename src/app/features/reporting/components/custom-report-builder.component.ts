@@ -26,17 +26,15 @@ interface PropertyOption {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <p-card class="mb-8">
-      <ng-template pTemplate="header">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Custom Report Builder</h2>
-      </ng-template>
+    <div class="dashboard-card mb-8">
+        <p class="eyebrow">Build your own</p><h2 class="mt-1 text-base font-bold text-[var(--ink)]">Custom report builder</h2>
       <form [formGroup]="form" class="space-y-4">
         <!-- Date Range Picker -->
         <fieldset class="border-0 p-0 m-0">
           <legend class="sr-only">Date Range</legend>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="flex flex-col">
-              <label for="startDate" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Date</label>
+              <label for="startDate" class="eyebrow mb-2">Start date</label>
               <p-calendar
                 id="startDate"
                 formControlName="startDate"
@@ -45,7 +43,7 @@ interface PropertyOption {
               </p-calendar>
             </div>
             <div class="flex flex-col">
-              <label for="endDate" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Date</label>
+              <label for="endDate" class="eyebrow mb-2">End date</label>
               <p-calendar
                 id="endDate"
                 formControlName="endDate"
@@ -57,7 +55,7 @@ interface PropertyOption {
         </fieldset>
 
         <div class="flex flex-col">
-          <label for="properties" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Properties</label>
+          <label for="properties" class="eyebrow mb-2">Properties</label>
           <p-select
             id="properties"
             formControlName="properties"
@@ -75,22 +73,12 @@ interface PropertyOption {
         </app-metrics-selector>
 
         <!-- Action Buttons -->
-        <div class="flex gap-4 pt-4">
-          <p-button
-            label="Preview"
-            icon="pi pi-eye"
-            severity="secondary"
-            (click)="onPreview()">
-          </p-button>
-          <p-button
-            label="Generate Report"
-            icon="pi pi-download"
-            severity="success"
-            (click)="onGenerate()">
-          </p-button>
+        <div class="flex flex-wrap gap-2 pt-4">
+          <button type="button" class="btn-secondary" (click)="onPreview()"><i class="pi pi-eye text-xs"></i> Preview</button>
+          <button type="button" class="btn-primary" (click)="onGenerate()"><i class="pi pi-download text-xs"></i> Generate report</button>
         </div>
       </form>
-    </p-card>
+    </div>
   `
 })
 export class CustomReportBuilderComponent {

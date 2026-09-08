@@ -15,7 +15,9 @@ interface ReportRecord {
   imports: [CommonModule, TableModule, ButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <p-table [value]="reports" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+    <div class="surface-card overflow-hidden">
+    <div class="border-b border-[var(--line)] px-5 py-4"><p class="eyebrow">Archive</p><h2 class="mt-1 text-base font-bold text-[var(--ink)]">Report history</h2></div>
+    <p-table [value]="reports" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="name">Report Name <p-sortIcon field="name"></p-sortIcon></th>
@@ -51,6 +53,7 @@ interface ReportRecord {
         </tr>
       </ng-template>
     </p-table>
+    </div>
   `
 })
 export class ReportHistoryComponent {

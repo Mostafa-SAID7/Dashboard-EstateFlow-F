@@ -17,16 +17,16 @@ import { MessageModule } from 'primeng/message';
   imports: [CommonModule, FormsModule, PropertyCardComponent, FilterPanelComponent, InputTextModule, ButtonModule, MessageModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-4 md:p-6 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-200">
+    <div class="animate-in space-y-6">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Property Listings</h1>
-        <p class="text-gray-600 dark:text-gray-400 mt-2">Manage and view all properties in your portfolio</p>
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div><p class="eyebrow mb-2">Portfolio workspace</p><h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Properties</h1><p class="mt-1 text-sm text-[var(--ink-muted)]">Manage every property in your portfolio.</p></div>
+        <button (click)="exportSelected('csv')" class="btn-secondary"><i class="pi pi-download text-xs"></i> Export view</button>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-6">
+      <div class="grid grid-cols-1 gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
         <!-- Sidebar Filters -->
-        <div class="lg:col-span-1">
+         <div>
           <app-filter-panel
             (filtersApplied)="applyFilters($event)"
             (filtersCleared)="clearFilters()">
@@ -34,9 +34,9 @@ import { MessageModule } from 'primeng/message';
         </div>
 
         <!-- Main Content -->
-        <div class="lg:col-span-3">
+         <div>
           <!-- Search and Controls -->
-          <div class="bg-white dark:bg-gray-900 rounded-lg shadow-md dark:shadow-lg p-4 mb-6 border border-gray-200 dark:border-gray-800 transition-colors duration-200">
+           <div class="dashboard-card mb-5">
             <div class="flex gap-4 mb-4 flex-col md:flex-row">
               <span class="p-input-icon-left flex-1">
                 <i class="pi pi-search"></i>
@@ -45,12 +45,12 @@ import { MessageModule } from 'primeng/message';
                   placeholder="Search by address or property name..."
                   [(ngModel)]="searchQuery"
                   (ngModelChange)="onSearchChange($event)"
-                  class="w-full">
+                   class="input-field w-full pl-10">
               </span>
               
               <select [(ngModel)]="sortField"
                       (ngModelChange)="applySorting($event)"
-                      class="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors">
+                       class="input-field min-w-[11rem]">
                 <option value="address">Sort by Address</option>
                 <option value="price">Sort by Price</option>
                 <option value="occupancy">Sort by Occupancy</option>
@@ -61,13 +61,13 @@ import { MessageModule } from 'primeng/message';
 
             <!-- Results Info -->
             <div class="flex justify-between items-center flex-col md:flex-row gap-2">
-              <p class="text-sm text-gray-600 dark:text-gray-400">
+               <p class="text-xs text-[var(--ink-muted)]">
                 Showing {{ filteredProperties().length }} of {{ properties().length }} properties
               </p>
               <div *ngIf="hasActiveFilters()" class="flex gap-2">
-                <span class="text-sm text-blue-600 dark:text-blue-400">Filters active</span>
+                 <span class="rounded-full bg-[var(--brand-soft)] px-2.5 py-1 text-[10px] font-bold text-[var(--brand)]">Filters active</span>
                 <button (click)="clearFilters()"
-                        class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors">
+                         class="text-xs font-bold text-[var(--brand)] hover:underline">
                   Clear all
                 </button>
               </div>
@@ -76,9 +76,9 @@ import { MessageModule } from 'primeng/message';
 
           <!-- Bulk Actions -->
           <div *ngIf="selectedProperties().size > 0"
-               class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6 transition-colors duration-200">
+               class="mb-5 rounded-2xl border border-[var(--line)] bg-[var(--brand-soft)] p-4">
             <div class="flex justify-between items-center flex-col md:flex-row gap-4">
-              <p class="text-sm font-medium text-blue-900 dark:text-blue-200">
+               <p class="text-sm font-semibold text-[var(--brand-dark)] dark:text-[var(--brand)]">
                 {{ selectedProperties().size }} properties selected
               </p>
               <div class="flex gap-2 flex-wrap">
@@ -110,11 +110,7 @@ import { MessageModule } from 'primeng/message';
           </div>
 
           <ng-template #noProperties>
-            <p-message
-              severity="info"
-              text="No properties found. Try adjusting your filters or search criteria."
-              [styleClass]="'w-full'">
-            </p-message>
+               <div class="dashboard-card flex flex-col items-center justify-center py-16 text-center"><span class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)]"><i class="pi pi-building"></i></span><p class="text-sm font-semibold text-[var(--ink)]">No properties found</p><p class="mt-1 text-xs text-[var(--ink-muted)]">Try adjusting your filters or search criteria.</p></div>
           </ng-template>
         </div>
       </div>

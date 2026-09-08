@@ -30,19 +30,15 @@ import { TooltipModule } from 'primeng/tooltip';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-200">
-      <div class="max-w-7xl mx-auto">
+    <div class="animate-in space-y-6">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Work Orders</h1>
-            <p class="text-gray-600 dark:text-gray-400 mt-2">Manage maintenance and repairs</p>
+            <p class="eyebrow mb-2">Operations queue</p>
+            <h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Work orders</h1>
+            <p class="mt-1 text-sm text-[var(--ink-muted)]">Keep maintenance requests moving from open to complete.</p>
           </div>
-          <p-button
-            label="Create Work Order"
-            icon="pi pi-plus"
-            (click)="openCreateForm()">
-          </p-button>
+          <button (click)="openCreateForm()" class="btn-primary"><i class="pi pi-plus text-xs"></i> Create work order</button>
         </div>
 
         <!-- Create Form Dialog -->
@@ -53,7 +49,7 @@ import { TooltipModule } from 'primeng/tooltip';
           [style]="{ width: '50vw' }">
           <form [formGroup]="workOrderForm" (ngSubmit)="submitWorkOrder()" class="space-y-4">
             <div class="field">
-              <label for="propertyId" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Property</label>
+               <label for="propertyId" class="eyebrow mb-2 block">Property</label>
               <p-select
                 id="propertyId"
                 formControlName="propertyId"
@@ -65,7 +61,7 @@ import { TooltipModule } from 'primeng/tooltip';
               </p-select>
             </div>
             <div class="field">
-              <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+               <label for="description" class="eyebrow mb-2 block">Description</label>
               <textarea pInputTextarea
                 id="description"
                 formControlName="description"
@@ -75,7 +71,7 @@ import { TooltipModule } from 'primeng/tooltip';
               </textarea>
             </div>
             <div class="field">
-              <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Priority</label>
+               <label for="priority" class="eyebrow mb-2 block">Priority</label>
               <p-select
                 id="priority"
                 formControlName="priority"
@@ -86,7 +82,7 @@ import { TooltipModule } from 'primeng/tooltip';
               </p-select>
             </div>
             <div class="field">
-              <label for="estimatedCost" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estimated Cost</label>
+               <label for="estimatedCost" class="eyebrow mb-2 block">Estimated cost</label>
               <input pInputText
                 id="estimatedCost"
                 type="number"
@@ -110,7 +106,8 @@ import { TooltipModule } from 'primeng/tooltip';
         </p-dialog>
 
         <!-- Work Orders List -->
-        <p-table [value]="(workOrders$ | async) || []" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+        <div class="surface-card overflow-hidden">
+        <p-table [value]="(workOrders$ | async) || []" [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
@@ -156,8 +153,8 @@ import { TooltipModule } from 'primeng/tooltip';
             </tr>
           </ng-template>
         </p-table>
+        </div>
       </div>
-    </div>
   `
 })
 export class WorkOrderComponent implements OnInit {

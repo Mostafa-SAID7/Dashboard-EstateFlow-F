@@ -11,35 +11,34 @@ import { markNotificationAsRead, dismissNotification } from '../../store/notific
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-200">
-      <div class="max-w-4xl mx-auto">
+    <div class="animate-in space-y-6">
         <!-- Header -->
-        <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Notifications</h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-2">Unread: {{ (unreadCount$ | async) || 0 }}</p>
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div><p class="eyebrow mb-2">Stay in the loop</p><h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Notifications</h1><p class="mt-1 text-sm text-[var(--ink-muted)]">Unread: {{ (unreadCount$ | async) || 0 }}</p></div>
+          <span class="rounded-full bg-[var(--brand-soft)] px-3 py-1.5 text-[10px] font-bold text-[var(--brand)]"><i class="pi pi-bell mr-2"></i>Live updates</span>
         </div>
 
         <!-- Notification Filters -->
-        <div class="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-lg p-4 mb-6 flex gap-4 border border-gray-200 dark:border-gray-800 transition-colors duration-200 flex-wrap">
-          <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">All</button>
-          <button class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">Unread</button>
-          <button class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">Lease Expiration</button>
-          <button class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">Payment Overdue</button>
-          <button class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">Maintenance</button>
+        <div class="dashboard-card flex flex-wrap gap-2">
+          <button class="rounded-full bg-[var(--brand-dark)] px-4 py-2 text-xs font-semibold text-white">All</button>
+          <button class="rounded-full border border-[var(--line)] px-4 py-2 text-xs font-semibold text-[var(--ink-muted)] hover:text-[var(--ink)]">Unread</button>
+          <button class="rounded-full border border-[var(--line)] px-4 py-2 text-xs font-semibold text-[var(--ink-muted)] hover:text-[var(--ink)]">Lease expiration</button>
+          <button class="rounded-full border border-[var(--line)] px-4 py-2 text-xs font-semibold text-[var(--ink-muted)] hover:text-[var(--ink)]">Payment overdue</button>
+          <button class="rounded-full border border-[var(--line)] px-4 py-2 text-xs font-semibold text-[var(--ink-muted)] hover:text-[var(--ink)]">Maintenance</button>
         </div>
 
         <!-- Notifications List -->
         <div class="space-y-4">
           <div *ngFor="let notification of (notifications$ | async)" 
-               [ngClass]="{'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500': !notification.read, 'bg-white dark:bg-gray-900': notification.read}"
-               class="rounded-lg shadow dark:shadow-lg p-6 hover:shadow-lg dark:hover:shadow-xl transition border border-gray-200 dark:border-gray-800">
+               [ngClass]="{'border-[var(--brand)] bg-[var(--brand-soft)]': !notification.read, 'bg-[var(--surface)]': notification.read}"
+               class="surface-card p-5 hover:-translate-y-0.5">
             <div class="flex justify-between items-start">
               <div class="flex-1">
-                <h3 class="font-semibold text-gray-900 dark:text-white">{{ notification.title }}</h3>
-                <p class="text-gray-600 dark:text-gray-400 mt-2">{{ notification.message }}</p>
-                <div class="flex gap-4 mt-4">
-                  <span class="text-xs text-gray-500 dark:text-gray-400">{{ notification.createdAt | date:'short' }}</span>
-                  <span [ngClass]="getTypeClass(notification.type)" class="text-xs px-2 py-1 rounded">
+                 <h3 class="text-sm font-bold text-[var(--ink)]">{{ notification.title }}</h3>
+                 <p class="mt-2 text-xs leading-5 text-[var(--ink-muted)]">{{ notification.message }}</p>
+                 <div class="mt-4 flex items-center gap-3">
+                   <span class="text-[10px] text-[var(--ink-muted)]">{{ notification.createdAt | date:'short' }}</span>
+                   <span [ngClass]="getTypeClass(notification.type)" class="rounded-full px-2 py-1 text-[10px] font-semibold">
                     {{ notification.type }}
                   </span>
                 </div>
@@ -47,19 +46,18 @@ import { markNotificationAsRead, dismissNotification } from '../../store/notific
               <div class="flex gap-2 ml-4">
                 <button *ngIf="!notification.read" 
                         (click)="markAsRead(notification.id)"
-                        class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 text-sm transition-colors">Mark as read</button>
-                <button (click)="dismiss(notification.id)" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 text-sm transition-colors">Dismiss</button>
+                         class="text-xs font-bold text-[var(--brand)] hover:underline">Mark as read</button>
+                <button (click)="dismiss(notification.id)" class="text-xs font-bold text-rose-600 hover:underline">Dismiss</button>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Empty State -->
-        <div *ngIf="(notifications$ | async)?.length === 0" class="text-center py-12">
-          <p class="text-gray-500 dark:text-gray-400">No notifications</p>
+          <div *ngIf="(notifications$ | async)?.length === 0" class="dashboard-card py-16 text-center">
+          <p class="text-sm text-[var(--ink-muted)]">No notifications</p>
         </div>
-      </div>
-    </div>
+        </div>
   `
 })
 export class NotificationCenterComponent implements OnInit {
@@ -87,11 +85,11 @@ export class NotificationCenterComponent implements OnInit {
 
   getTypeClass(type: string): string {
     const classes: { [key: string]: string } = {
-      'lease-expiration': 'bg-yellow-100 text-yellow-800',
-      'payment-overdue': 'bg-red-100 text-red-800',
-      'maintenance-alert': 'bg-orange-100 text-orange-800',
-      'occupancy-alert': 'bg-blue-100 text-blue-800'
+      'lease-expiration': 'bg-[#f5e0d9] text-[#a95d4e]',
+      'payment-overdue': 'bg-rose-100 text-rose-700 dark:bg-rose-950/30 dark:text-rose-200',
+      'maintenance-alert': 'bg-[#f5e8c9] text-[#997219]',
+      'occupancy-alert': 'bg-[var(--brand-soft)] text-[var(--brand-dark)] dark:text-[var(--brand)]'
     };
-    return classes[type] || 'bg-gray-100 text-gray-800';
+    return classes[type] || 'bg-[var(--surface-muted)] text-[var(--ink-muted)]';
   }
 }

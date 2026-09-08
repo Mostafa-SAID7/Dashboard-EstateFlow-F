@@ -14,19 +14,19 @@ import { PropertyService } from '../../services/property.service';
   imports: [CommonModule, ReactiveFormsModule, PhotoGalleryComponent, TimelineComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6 bg-gray-50 min-h-screen">
+    <div class="animate-in space-y-6">
       <!-- Header -->
-      <div class="flex justify-between items-start mb-8">
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <button (click)="goBack()"
-                  class="text-blue-600 hover:text-blue-800 mb-2">
-            ← Back to Listings
+                  class="mb-2 text-xs font-bold text-[var(--brand)] hover:underline">
+            <i class="pi pi-arrow-left mr-2"></i>Back to properties
           </button>
-          <h1 class="text-3xl font-bold text-gray-900">Property Details</h1>
+          <h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Property details</h1>
         </div>
         <button (click)="toggleEdit()"
-                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-          {{ isEditing() ? 'Cancel' : 'Edit' }}
+                class="btn-primary">
+          <i class="pi pi-pencil text-xs"></i>{{ isEditing() ? 'Cancel' : 'Edit property' }}
         </button>
       </div>
 
@@ -34,57 +34,57 @@ import { PropertyService } from '../../services/property.service';
         <!-- Main Content -->
         <div class="lg:col-span-2 space-y-6">
           <!-- Property Info Card -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+           <div class="dashboard-card">
+             <h2 class="font-display text-2xl font-bold tracking-tight text-[var(--ink)]">
               {{ property()!.address.street }}
             </h2>
-            <p class="text-gray-600 mb-6">
+             <p class="mb-6 text-sm text-[var(--ink-muted)]">
               {{ property()!.address.city }}, {{ property()!.address.state }} {{ property()!.address.zipCode }}
             </p>
 
             <!-- Property Details Grid -->
-            <div class="grid grid-cols-2 gap-6 mb-6">
+             <div class="mb-6 grid grid-cols-2 gap-5">
               <div>
-                <p class="text-sm text-gray-600">Property Type</p>
-                <p class="text-lg font-semibold text-gray-900">{{ property()!.type | titlecase }}</p>
+                 <p class="eyebrow">Property type</p>
+                 <p class="mt-1 text-sm font-semibold text-[var(--ink)]">{{ property()!.type | titlecase }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Year Built</p>
-                <p class="text-lg font-semibold text-gray-900">{{ property()!.yearBuilt }}</p>
+                 <p class="eyebrow">Year built</p>
+                 <p class="mt-1 text-sm font-semibold text-[var(--ink)]">{{ property()!.yearBuilt }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Square Feet</p>
-                <p class="text-lg font-semibold text-gray-900">{{ property()!.sizeSqft | number }}</p>
+                 <p class="eyebrow">Square feet</p>
+                 <p class="mt-1 text-sm font-semibold text-[var(--ink)]">{{ property()!.sizeSqft | number }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Status</p>
-                <p class="text-lg font-semibold" [ngClass]="property()!.status === 'active' ? 'text-green-600' : 'text-red-600'">
+                 <p class="eyebrow">Status</p>
+                 <p class="mt-1 text-sm font-semibold" [ngClass]="property()!.status === 'active' ? 'text-[var(--brand)]' : 'text-rose-600'">
                   {{ property()!.status | titlecase }}
                 </p>
               </div>
             </div>
 
             <!-- Financial Metrics -->
-            <div class="border-t border-gray-200 pt-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4">Financial Metrics</h3>
+             <div class="border-t border-[var(--line)] pt-6">
+               <h3 class="mb-4 text-base font-bold text-[var(--ink)]">Financial metrics</h3>
               <div class="grid grid-cols-2 gap-6">
                 <div>
-                  <p class="text-sm text-gray-600">Monthly Revenue</p>
-                  <p class="text-2xl font-bold text-green-600">{{ property()!.monthlyRevenue | currency }}</p>
+                   <p class="eyebrow">Monthly revenue</p>
+                   <p class="mt-1 font-display text-xl font-bold text-[var(--brand)]">{{ property()!.monthlyRevenue | currency }}</p>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-600">Annual Revenue</p>
-                  <p class="text-2xl font-bold text-green-600">{{ (property()!.monthlyRevenue * 12) | currency }}</p>
+                   <p class="eyebrow">Annual revenue</p>
+                   <p class="mt-1 font-display text-xl font-bold text-[var(--brand)]">{{ (property()!.monthlyRevenue * 12) | currency }}</p>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-600">ROI</p>
-                  <p class="text-2xl font-bold" [ngClass]="property()!.roi >= 0 ? 'text-green-600' : 'text-red-600'">
+                   <p class="eyebrow">ROI</p>
+                   <p class="mt-1 font-display text-xl font-bold" [ngClass]="property()!.roi >= 0 ? 'text-[var(--brand)]' : 'text-rose-600'">
                     {{ property()!.roi | number: '1.1-1' }}%
                   </p>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-600">Occupancy Rate</p>
-                  <p class="text-2xl font-bold text-gray-900">{{ property()!.occupancyRate | number: '1.1-1' }}%</p>
+                   <p class="eyebrow">Occupancy rate</p>
+                   <p class="mt-1 font-display text-xl font-bold text-[var(--ink)]">{{ property()!.occupancyRate | number: '1.1-1' }}%</p>
                 </div>
               </div>
             </div>
@@ -106,44 +106,44 @@ import { PropertyService } from '../../services/property.service';
         <!-- Sidebar -->
         <div class="space-y-6">
           <!-- Manager Info -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Manager</h3>
+           <div class="dashboard-card">
+             <h3 class="mb-4 text-base font-bold text-[var(--ink)]">Manager</h3>
             <div class="space-y-3">
               <div>
-                <p class="text-sm text-gray-600">Manager ID</p>
-                <p class="font-semibold text-gray-900">{{ property()!.managerId }}</p>
+                 <p class="eyebrow">Manager ID</p>
+                 <p class="mt-1 text-sm font-semibold text-[var(--ink)]">{{ property()!.managerId }}</p>
               </div>
-              <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+               <button class="btn-primary w-full">
                 Contact Manager
               </button>
             </div>
           </div>
 
           <!-- Owner Info -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Owner</h3>
+           <div class="dashboard-card">
+             <h3 class="mb-4 text-base font-bold text-[var(--ink)]">Owner</h3>
             <div class="space-y-3">
               <div>
-                <p class="text-sm text-gray-600">Owner ID</p>
-                <p class="font-semibold text-gray-900">{{ property()!.ownerId }}</p>
+                 <p class="eyebrow">Owner ID</p>
+                 <p class="mt-1 text-sm font-semibold text-[var(--ink)]">{{ property()!.ownerId }}</p>
               </div>
-              <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+               <button class="btn-primary w-full">
                 Contact Owner
               </button>
             </div>
           </div>
 
           <!-- Quick Actions -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+           <div class="dashboard-card">
+             <h3 class="mb-4 text-base font-bold text-[var(--ink)]">Quick actions</h3>
             <div class="space-y-2">
-              <button class="w-full px-4 py-2 bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 text-sm">
+               <button class="btn-secondary w-full !text-xs">
                 Create Work Order
               </button>
-              <button class="w-full px-4 py-2 bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 text-sm">
+               <button class="btn-secondary w-full !text-xs">
                 View Maintenance History
               </button>
-              <button class="w-full px-4 py-2 bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 text-sm">
+               <button class="btn-secondary w-full !text-xs">
                 View Payment History
               </button>
             </div>
@@ -152,8 +152,8 @@ import { PropertyService } from '../../services/property.service';
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="!property()" class="text-center py-12">
-        <p class="text-gray-500">Loading property details...</p>
+       <div *ngIf="!property()" class="dashboard-card py-16 text-center">
+         <p class="text-sm text-[var(--ink-muted)]">Loading property details...</p>
       </div>
     </div>
   `,

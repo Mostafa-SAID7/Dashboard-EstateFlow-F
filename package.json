@@ -9,6 +9,11 @@
     "test": "ng test"
   },
   "private": true,
+  "overrides": {
+    "websocket-driver": "^0.7.5",
+    "tar": "^7.5.2",
+    "shell-quote": "^1.10.0"
+  },
   "dependencies": {
     "@angular/animations": "^18.2.0",
     "@angular/cdk": "^18.2.14",
@@ -22,30 +27,31 @@
     "@angular/router": "^18.2.0",
     "@ngrx/effects": "^18.1.1",
     "@ngrx/store": "^18.1.1",
+    "@rollup/rollup-linux-x64-gnu": "^4.63.1",
     "chart.js": "^4.5.1",
     "leaflet": "^1.9.4",
     "primeicons": "^7.0.0",
     "primeng": "^18.0.0",
-    "rxjs": "~7.8.0",
+    "rxjs": "^7.8.0",
     "tailwindcss-primeui": "^0.6.1",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.10"
+    "zone.js": "^0.14.10"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.21",
     "@angular/cli": "^18.2.21",
     "@angular/compiler-cli": "^18.2.0",
-    "@types/jasmine": "~5.1.0",
+    "@types/jasmine": "^5.1.0",
     "@types/leaflet": "^1.9.21",
     "autoprefixer": "^10.4.27",
-    "jasmine-core": "~5.2.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "jasmine-core": "^5.2.0",
+    "karma": "^6.4.0",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.0",
+    "karma-jasmine": "^5.1.0",
+    "karma-jasmine-html-reporter": "^2.1.0",
     "postcss": "^8.5.9",
     "tailwindcss": "^3.4.19",
-    "typescript": "~5.5.2"
+    "typescript": "^5.5.2"
   }
 }

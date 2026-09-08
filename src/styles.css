@@ -3,31 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --canvas: #f6f7f4;
+  --canvas: #f0f2ef;
   --surface: #ffffff;
-  --surface-muted: #f0f2ee;
-  --surface-soft: #fafbf9;
-  --ink: #17231d;
-  --ink-muted: #7b857d;
-  --line: #e6eae4;
-  --brand: #167653;
-  --brand-dark: #0d4f3a;
-  --brand-soft: #e2f2ea;
-  --ring: rgba(22, 118, 83, 0.2);
+  --surface-muted: #f5f6f4;
+  --surface-soft: #fbfcfb;
+  --ink: #121916;
+  --ink-muted: #8b948e;
+  --line: #e8ebe8;
+  --brand: #16825e;
+  --brand-dark: #07513a;
+  --brand-soft: #e4f2ec;
+  --accent: #f3d7ce;
+  --ring: rgba(22, 130, 94, 0.2);
 }
 
 .dark {
-  --canvas: #111815;
-  --surface: #18211d;
-  --surface-muted: #202c26;
-  --surface-soft: #1c2722;
+  --canvas: #101613;
+  --surface: #18201c;
+  --surface-muted: #202a25;
+  --surface-soft: #1b2520;
   --ink: #f4f7f4;
-  --ink-muted: #9daaa1;
-  --line: #2d3b33;
-  --brand: #4fbd8e;
-  --brand-dark: #2f9d70;
-  --brand-soft: #173d2f;
-  --ring: rgba(79, 189, 142, 0.25);
+  --ink-muted: #9eaaa2;
+  --line: #2b3931;
+  --brand: #54c79a;
+  --brand-dark: #277c5a;
+  --brand-soft: #183d2f;
+  --accent: #664840;
+  --ring: rgba(84, 199, 154, 0.25);
 }
 
 @layer base {
@@ -42,6 +44,7 @@
   body {
     @apply min-h-screen bg-[var(--canvas)] font-sans text-[var(--ink)] antialiased transition-colors duration-300;
     margin: 0;
+    background-image: radial-gradient(circle at 10% 0%, rgba(255,255,255,.75), transparent 28rem);
   }
 
   button,
@@ -60,7 +63,7 @@
 
 @layer components {
   .surface-card {
-    @apply rounded-2xl border border-[var(--line)] bg-[var(--surface)] shadow-sm transition-colors duration-300;
+    @apply rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)] shadow-[0_8px_28px_-24px_rgba(15,35,25,.5)] transition-all duration-300;
   }
 
   .surface-muted {
@@ -68,15 +71,15 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--brand-dark)] hover:shadow-md;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-[var(--brand-dark)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_20px_-12px_var(--brand-dark)] transition hover:-translate-y-0.5 hover:bg-[var(--brand)] hover:shadow-lg;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-4 py-2.5 text-sm font-semibold text-[var(--ink)] transition hover:border-[var(--brand)] hover:text-[var(--brand)];
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line)] bg-[var(--surface)] px-5 py-2.5 text-sm font-semibold text-[var(--ink)] transition hover:border-[var(--brand)] hover:text-[var(--brand)];
   }
 
   .input-field {
-    @apply rounded-xl border border-[var(--line)] bg-[var(--surface)] px-4 py-2.5 text-sm text-[var(--ink)] placeholder:text-[var(--ink-muted)] transition focus:border-[var(--brand)] focus:outline-none focus:ring-4 focus:ring-[var(--ring)];
+    @apply rounded-full border border-transparent bg-[var(--surface-muted)] px-4 py-2.5 text-sm text-[var(--ink)] placeholder:text-[var(--ink-muted)] transition focus:border-[var(--brand)] focus:outline-none focus:ring-4 focus:ring-[var(--ring)];
   }
 
   .eyebrow {
@@ -84,7 +87,15 @@
   }
 
   .icon-button {
-    @apply inline-flex h-10 w-10 items-center justify-center rounded-xl text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)];
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-full text-[var(--ink-muted)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--ink)];
+  }
+
+  .dashboard-card {
+    @apply surface-card min-w-0 p-5 sm:p-6;
+  }
+
+  .nav-active {
+    @apply bg-[var(--brand-soft)] font-semibold text-[var(--brand-dark)] dark:text-[var(--brand)];
   }
 }
 

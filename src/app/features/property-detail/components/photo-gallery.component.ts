@@ -8,18 +8,18 @@ import { PropertyPhoto } from '../../../models/property.model';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">Photo Gallery</h3>
+    <div class="dashboard-card">
+      <h3 class="mb-4 text-base font-bold text-[var(--ink)]">Photo gallery</h3>
 
       <!-- Main Photo -->
-      <div class="mb-4 rounded-lg overflow-hidden bg-gray-200 h-96">
+      <div class="mb-4 h-96 overflow-hidden rounded-2xl bg-[var(--surface-muted)]">
         <img *ngIf="selectedPhoto()"
              [src]="selectedPhoto()!.url"
              alt="Property photo"
-             class="w-full h-full object-cover">
+             class="h-full w-full object-cover">
         <div *ngIf="!selectedPhoto()"
-             class="w-full h-full flex items-center justify-center text-gray-400">
-          <span class="text-6xl">📷</span>
+             class="flex h-full w-full items-center justify-center text-[var(--ink-muted)]">
+          <i class="pi pi-image text-4xl"></i>
         </div>
       </div>
 
@@ -27,8 +27,8 @@ import { PropertyPhoto } from '../../../models/property.model';
       <div *ngIf="photos.length > 0" class="grid grid-cols-6 gap-2 mb-4">
         <button *ngFor="let photo of photos"
                 (click)="selectPhoto(photo)"
-                class="relative rounded-lg overflow-hidden border-2"
-                [ngClass]="selectedPhoto()?.id === photo.id ? 'border-blue-500' : 'border-gray-300'">
+                 class="relative overflow-hidden rounded-xl border-2"
+                 [ngClass]="selectedPhoto()?.id === photo.id ? 'border-[var(--brand)]' : 'border-[var(--line)]'">
           <img [src]="photo.url"
                alt="Thumbnail"
                class="w-full h-16 object-cover">
@@ -36,23 +36,23 @@ import { PropertyPhoto } from '../../../models/property.model';
       </div>
 
       <!-- Upload Section -->
-      <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+       <div class="rounded-2xl border-2 border-dashed border-[var(--line)] p-6 text-center">
         <input type="file"
                #fileInput
                (change)="onFileSelected($event)"
                accept="image/*"
                class="hidden">
         <button (click)="fileInput.click()"
-                class="text-blue-600 hover:text-blue-800 font-medium">
-          + Upload Photo
+                 class="text-xs font-bold text-[var(--brand)] hover:underline">
+           <i class="pi pi-upload mr-2"></i>Upload photo
         </button>
-        <p class="text-sm text-gray-600 mt-2">Click to select an image</p>
+         <p class="mt-2 text-[11px] text-[var(--ink-muted)]">Click to select an image</p>
       </div>
 
       <!-- Delete Button -->
       <div *ngIf="selectedPhoto()" class="mt-4">
         <button (click)="deletePhoto()"
-                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                 class="rounded-full bg-rose-600 px-4 py-2 text-xs font-semibold text-white hover:bg-rose-700">
           Delete Selected Photo
         </button>
       </div>

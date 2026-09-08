@@ -16,19 +16,18 @@ import { CardModule } from 'primeng/card';
   imports: [CommonModule, ReactiveFormsModule, SelectModule, ButtonModule, CardModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-200">
-      <div class="max-w-7xl mx-auto">
+    <div class="animate-in space-y-6">
         <!-- Header -->
-        <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Financial Analytics</h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-2">Comprehensive financial metrics and analysis</p>
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div><p class="eyebrow mb-2">Portfolio intelligence</p><h1 class="font-display text-3xl font-bold tracking-[-0.04em] text-[var(--ink)]">Financial analytics</h1><p class="mt-1 text-sm text-[var(--ink-muted)]">Understand the health of your portfolio at a glance.</p></div>
+          <button class="btn-secondary"><i class="pi pi-download text-xs"></i> Export report</button>
         </div>
 
         <!-- Period Selector -->
-        <p-card class="mb-6">
-          <form [formGroup]="periodForm" class="flex gap-4 items-end">
+        <div class="dashboard-card">
+          <form [formGroup]="periodForm" class="flex flex-col gap-4 sm:flex-row sm:items-end">
             <div class="flex-1">
-              <label for="period" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Period</label>
+               <label for="period" class="eyebrow mb-2 block">Period</label>
               <p-select
                 id="period"
                 formControlName="period"
@@ -37,92 +36,53 @@ import { CardModule } from 'primeng/card';
                 optionValue="value">
               </p-select>
             </div>
-            <p-button
-              label="Load Data"
-              icon="pi pi-refresh"
-              (click)="loadMetrics()">
-            </p-button>
+            <button type="button" class="btn-primary" (click)="loadMetrics()"><i class="pi pi-refresh text-xs"></i> Load data</button>
           </form>
-        </p-card>
+        </div>
 
         <!-- Summary Metrics -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <p-card>
-            <ng-template pTemplate="header">
-              <div class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Revenue</div>
-            </ng-template>
-            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalRevenue() | currency }}</p>
-            <p class="text-green-600 dark:text-green-400 text-sm mt-2">+12% from last period</p>
-          </p-card>
-          <p-card>
-            <ng-template pTemplate="header">
-              <div class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Expenses</div>
-            </ng-template>
-            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalExpenses() | currency }}</p>
-            <p class="text-red-600 dark:text-red-400 text-sm mt-2">+5% from last period</p>
-          </p-card>
-          <p-card>
-            <ng-template pTemplate="header">
-              <div class="text-gray-600 dark:text-gray-400 text-sm font-medium">Net Profit</div>
-            </ng-template>
-            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ netProfit() | currency }}</p>
-            <p class="text-green-600 dark:text-green-400 text-sm mt-2">+18% from last period</p>
-          </p-card>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <article class="dashboard-card"><p class="text-xs font-semibold text-[var(--ink-muted)]">Total revenue</p><p class="mt-6 font-display text-3xl font-bold text-[var(--ink)]">{{ totalRevenue() | currency }}</p><p class="mt-2 text-[11px] font-semibold text-[var(--brand)]">+12% from last period</p></article>
+          <article class="dashboard-card"><p class="text-xs font-semibold text-[var(--ink-muted)]">Total expenses</p><p class="mt-6 font-display text-3xl font-bold text-[var(--ink)]">{{ totalExpenses() | currency }}</p><p class="mt-2 text-[11px] font-semibold text-[#b56855]">+5% from last period</p></article>
+          <article class="dashboard-card bg-[var(--brand-dark)] text-white"><p class="text-xs font-semibold text-emerald-100/70">Net profit</p><p class="mt-6 font-display text-3xl font-bold">{{ netProfit() | currency }}</p><p class="mt-2 text-[11px] font-semibold text-emerald-200">+18% from last period</p></article>
         </div>
 
         <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <p-card>
-            <ng-template pTemplate="header">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Revenue Breakdown</h2>
-            </ng-template>
-            <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center">
-              <p class="text-gray-500 dark:text-gray-400">Revenue chart placeholder</p>
+          <div class="dashboard-card">
+              <h2 class="text-base font-bold text-[var(--ink)]">Revenue breakdown</h2>
+            <div class="mt-5 flex h-56 items-end gap-3 border-b border-[var(--line)] pb-0">
+              <div *ngFor="let height of [38,54,48,72,62,82,94]" class="flex-1 rounded-t-full bg-[var(--brand-soft)] transition hover:bg-[var(--brand)]" [style.height.%]="height"></div>
             </div>
-          </p-card>
-          <p-card>
-            <ng-template pTemplate="header">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Expense Breakdown</h2>
-            </ng-template>
-            <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center">
-              <p class="text-gray-500 dark:text-gray-400">Expense chart placeholder</p>
+          </div>
+          <div class="dashboard-card">
+              <h2 class="text-base font-bold text-[var(--ink)]">Expense breakdown</h2>
+            <div class="mt-5 flex h-56 items-center justify-center"><div class="relative flex h-36 w-36 items-center justify-center rounded-full" style="background: conic-gradient(var(--brand) 0 62%, #f1d2c9 62% 80%, var(--surface-muted) 80% 100%)"><div class="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-[var(--surface)]"><span class="font-display text-xl font-bold text-[var(--ink)]">62%</span><span class="text-[10px] text-[var(--ink-muted)]">Operations</span></div></div></div>
             </div>
-          </p-card>
         </div>
 
         <!-- ROI and Cash Flow -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <p-card>
-            <ng-template pTemplate="header">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">ROI by Property</h2>
-            </ng-template>
-            <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center">
-              <p class="text-gray-500 dark:text-gray-400">ROI chart placeholder</p>
+          <div class="dashboard-card">
+              <h2 class="text-base font-bold text-[var(--ink)]">ROI by property</h2>
+            <div class="mt-5 h-56 space-y-4 pt-3"><div *ngFor="let roiBar of [78,62,54,42]" class="flex items-center gap-3"><span class="w-12 text-[10px] text-[var(--ink-muted)]">Asset {{ roiBar / 10 }}</span><div class="h-2 flex-1 rounded-full bg-[var(--surface-muted)]"><div class="h-full rounded-full bg-[var(--brand)]" [style.width.%]="roiBar"></div></div><span class="text-[10px] font-bold text-[var(--ink)]">{{ roiBar / 5 | number:'1.0-0' }}%</span></div></div>
             </div>
-          </p-card>
-          <p-card>
-            <ng-template pTemplate="header">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Cash Flow Analysis</h2>
-            </ng-template>
-            <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center">
-              <p class="text-gray-500 dark:text-gray-400">Cash flow chart placeholder</p>
+          <div class="dashboard-card">
+              <h2 class="text-base font-bold text-[var(--ink)]">Cash flow analysis</h2>
+            <div class="mt-5 flex h-56 items-center justify-center rounded-2xl bg-[var(--surface-muted)]"><p class="text-xs text-[var(--ink-muted)]"><i class="pi pi-chart-line mr-2 text-[var(--brand)]"></i>Cash flow trends will appear here</p></div>
             </div>
-          </p-card>
         </div>
 
         <!-- Export Section -->
-        <p-card class="mt-6">
-          <ng-template pTemplate="header">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Export Report</h2>
-          </ng-template>
-          <div class="flex gap-4">
-            <p-button label="Export as PDF" severity="success" (click)="exportPDF()"></p-button>
-            <p-button label="Export as Excel" (click)="exportExcel()"></p-button>
-            <p-button label="Export as CSV" severity="secondary" (click)="exportCSV()"></p-button>
+        <div class="dashboard-card">
+            <h2 class="text-base font-bold text-[var(--ink)]">Export report</h2>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button class="btn-primary" (click)="exportPDF()"><i class="pi pi-file-pdf text-xs"></i> PDF</button>
+            <button class="btn-secondary" (click)="exportExcel()"><i class="pi pi-file-excel text-xs"></i> Excel</button>
+            <button class="btn-secondary" (click)="exportCSV()"><i class="pi pi-file text-xs"></i> CSV</button>
           </div>
-        </p-card>
+        </div>
       </div>
-    </div>
   `
 })
 export class FinancialAnalyticsComponent implements OnInit {
