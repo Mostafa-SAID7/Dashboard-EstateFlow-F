@@ -3,16 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { DialogModule } from 'primeng/dialog';
+import { SelectModule } from 'primeng/select';
+import { BadgeModule } from 'primeng/badge';
+import { InputTextarea } from 'primeng/inputtextarea';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { ButtonComponent } from '../../shared/ui/button.component';
 import { WorkOrderService } from '../../services/work-order.service';
 import { selectWorkOrders, selectWorkOrdersLoading } from '../../store/work-orders/work-orders.selectors';
 import { loadWorkOrders } from '../../store/work-orders/work-orders.actions';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { TableModule } from 'primeng/table';
-import { BadgeModule } from 'primeng/badge';
-import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-work-order',
@@ -20,13 +21,14 @@ import { TooltipModule } from 'primeng/tooltip';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    InputTextModule,
-    SelectModule,
-    ButtonModule,
     DialogModule,
-    TableModule,
+    SelectModule,
     BadgeModule,
-    TooltipModule
+    InputTextModule,
+    InputTextModule,
+    TableModule,
+    TooltipModule,
+    ButtonComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -48,18 +50,18 @@ import { TooltipModule } from 'primeng/tooltip';
           [modal]="true"
           [style]="{ width: '50vw' }">
           <form [formGroup]="workOrderForm" (ngSubmit)="submitWorkOrder()" class="space-y-4">
-            <div class="field">
-               <label for="propertyId" class="eyebrow mb-2 block">Property</label>
-              <p-select
-                id="propertyId"
-                formControlName="propertyId"
-                [options]="propertyOptions"
-                optionLabel="label"
-                optionValue="value"
-                placeholder="Select Property"
-                [showClear]="true">
-              </p-select>
-            </div>
+          <div>
+            <p class="eyebrow mb-2 block">Property</p>
+            <p-select
+              id="propertyId"
+              formControlName="propertyId"
+              [options]="propertyOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select Property"
+              [showClear]="true">
+            </p-select>
+          </div>
             <div class="field">
                <label for="description" class="eyebrow mb-2 block">Description</label>
               <textarea pInputTextarea
@@ -91,16 +93,17 @@ import { TooltipModule } from 'primeng/tooltip';
                 class="w-full">
             </div>
             <div class="flex gap-4 pt-4">
-              <p-button
-                label="Create"
+              <app-button
+                variant="primary"
                 type="submit"
+                label="Create"
                 [disabled]="!workOrderForm.valid">
-              </p-button>
-              <p-button
+              </app-button>
+              <app-button
+                variant="secondary"
                 label="Cancel"
-                severity="secondary"
                 (click)="closeCreateForm()">
-              </p-button>
+              </app-button>
             </div>
           </form>
         </p-dialog>
@@ -132,23 +135,22 @@ import { TooltipModule } from 'primeng/tooltip';
               </td>
               <td>{{ order.estimatedCost | currency }}</td>
               <td>
-                <p-button
-                  icon="pi pi-pencil"
-                  [rounded]="true"
-                  [text]="true"
-                  severity="info"
-                  pTooltip="Edit"
-                  tooltipPosition="top"
-                  class="mr-2">
-                </p-button>
-                <p-button
-                  icon="pi pi-trash"
-                  [rounded]="true"
-                  [text]="true"
-                  severity="danger"
-                  pTooltip="Delete"
-                  tooltipPosition="top">
-                </p-button>
+                <div class="flex gap-2">
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    icon="pi pi-pencil"
+                    ariaLabel="Edit work order"
+                    (click)="editWorkOrder(order)">
+                  </app-button>
+                  <app-button
+                    variant="danger"
+                    size="sm"
+                    icon="pi pi-trash"
+                    ariaLabel="Delete work order"
+                    (click)="deleteWorkOrder(order)">
+                  </app-button>
+                </div>
               </td>
             </tr>
           </ng-template>
@@ -209,6 +211,16 @@ export class WorkOrderComponent implements OnInit {
       // Dispatch action to create work order
       this.closeCreateForm();
     }
+  }
+
+  editWorkOrder(order: any): void {
+    // Handle edit action
+    console.log('Edit work order:', order);
+  }
+
+  deleteWorkOrder(order: any): void {
+    // Handle delete action
+    console.log('Delete work order:', order);
   }
 
   getPrioritySeverity(priority: string): 'info' | 'warn' | 'danger' | 'success' {

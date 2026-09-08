@@ -62,7 +62,10 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": ["src"]
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "leaflet"
+            ]
           },
           "serve": {
             "builder": "@angular-devkit/build-angular:dev-server",

@@ -15,13 +15,14 @@ export interface BreadcrumbItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav class="flex items-center gap-1 text-sm">
-      <a *ngFor="let item of items; let last = last"
-         [routerLink]="item.path"
-         [class]="getItemClasses(item)"
-         class="transition">
-        {{ item.label }}
-      </a>
-      <i *ngIf="!last" class="pi pi-chevron-right text-[var(--ink-muted)] mx-1"></i>
+      <ng-container *ngFor="let item of items; let last = last">
+        <a [routerLink]="item.path"
+           [class]="getItemClasses(item)"
+           class="transition">
+          {{ item.label }}
+        </a>
+        <i *ngIf="!last" class="pi pi-chevron-right text-[var(--ink-muted)] mx-1"></i>
+      </ng-container>
     </nav>
   `,
   styles: [`

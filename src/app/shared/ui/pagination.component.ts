@@ -9,8 +9,8 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="flex items-center justify-between gap-4 py-4">
       <p class="text-sm text-[var(--ink-muted)]">
-        Showing <span class="font-semibold">{{ from }}</span> to 
-        <span class="font-semibold">{{ to }}</span> of 
+        Showing <span class="font-semibold">{{ from() }}</span> to 
+        <span class="font-semibold">{{ to() }}</span> of 
         <span class="font-semibold">{{ total }}</span> results
       </p>
       
@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
         </button>
         
         <button 
-          *ngFor="let page of pages"
+          *ngFor="let page of pages()"
           (click)="goToPage(page)"
           [class]="page === currentPage ? 'btn-primary' : 'btn-secondary'"
           class="w-10 h-10 flex items-center justify-center text-xs">
@@ -32,7 +32,7 @@ import { CommonModule } from '@angular/common';
         
         <button 
           (click)="nextPage()"
-          [disabled]="currentPage === totalPages"
+          [disabled]="currentPage === totalPages()"
           class="icon-button disabled:opacity-50 disabled:cursor-not-allowed">
           <i class="pi pi-chevron-right"></i>
         </button>

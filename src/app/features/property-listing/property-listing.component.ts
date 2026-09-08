@@ -4,17 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { debounceTime, Subject } from 'rxjs';
+import { ButtonModule } from 'primeng/button';
 import { PropertyCardComponent } from './components/property-card.component';
 import { FilterPanelComponent, PropertyFilters } from './components/filter-panel.component';
 import { Property } from '../../models/property.model';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
+import { SearchBarComponent, ButtonComponent, AlertComponent } from '../../shared/ui';
 
 @Component({
   selector: 'app-property-listing',
   standalone: true,
-  imports: [CommonModule, FormsModule, PropertyCardComponent, FilterPanelComponent, InputTextModule, ButtonModule, MessageModule],
+  imports: [CommonModule, FormsModule, ButtonModule, PropertyCardComponent, FilterPanelComponent, SearchBarComponent, ButtonComponent, AlertComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="animate-in space-y-6">

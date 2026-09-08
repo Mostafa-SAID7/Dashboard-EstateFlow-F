@@ -15,14 +15,14 @@ interface Metric {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <fieldset class="border-0 p-0 m-0">
-       <legend class="eyebrow mb-3">Metrics</legend>
-       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-         <div *ngFor="let metric of metrics" class="flex items-center rounded-xl border border-[var(--line)] px-3 py-2">
+      <legend class="eyebrow mb-3">Metrics</legend>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div *ngFor="let metric of metrics" class="flex items-center rounded-xl border border-[var(--line)] px-3 py-2">
           <p-checkbox
             [formControl]="getMetricControl(metric.id)"
             [binary]="true">
           </p-checkbox>
-           <label class="ml-2 text-xs text-[var(--ink-muted)]">{{ metric.label }}</label>
+          <label class="ml-2 text-xs text-[var(--ink-muted)]">{{ metric.label }}</label>
         </div>
       </div>
     </fieldset>

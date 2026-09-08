@@ -98,7 +98,15 @@ export class AccessibilityService {
       return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
     });
 
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    const r2 = rgb[0] / 255;
+    const g2 = rgb[1] / 255;
+    const b2 = rgb[2] / 255;
+
+    const rLinear = r2 <= 0.03928 ? r2 / 12.92 : Math.pow((r2 + 0.055) / 1.055, 2.4);
+    const gLinear = g2 <= 0.03928 ? g2 / 12.92 : Math.pow((g2 + 0.055) / 1.055, 2.4);
+    const bLinear = b2 <= 0.03928 ? b2 / 12.92 : Math.pow((b2 + 0.055) / 1.055, 2.4);
+
+    return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
   }
 
   /**
@@ -107,9 +115,9 @@ export class AccessibilityService {
   private hexToRgb(hex: string): [number, number, number] | null {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? [
-      parseInt(result[1], 16),
-      parseInt(result[2], 16),
-      parseInt(result[3], 16)
+      parseInt(result[1] ?? '0', 16),
+      parseInt(result[2] ?? '0', 16),
+      parseInt(result[3] ?? '0', 16)
     ] : null;
   }
 

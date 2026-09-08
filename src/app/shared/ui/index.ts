@@ -2,6 +2,7 @@
 export { ButtonComponent } from './button.component';
 export { CardComponent } from './card.component';
 export { InputComponent } from './input.component';
+export { DatePickerComponent } from './date-picker.component';
 export { BadgeComponent } from './badge.component';
 export { AlertComponent } from './alert.component';
 export { LoadingSkeletonComponent } from './loading-skeleton.component';

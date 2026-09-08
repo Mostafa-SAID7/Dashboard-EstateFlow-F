@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReportTemplatesComponent } from './components/report-templates.component';
 import { CustomReportBuilderComponent } from './components/custom-report-builder.component';
 import { ReportHistoryComponent } from './components/report-history.component';
@@ -39,22 +39,38 @@ export class ReportingComponent {
 
   constructor() {
     this.customReportForm = this.fb.group({
-      startDate: [''],
-      endDate: [''],
-      properties: ['all'],
-      metrics: [[]]
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      properties: ['all', Validators.required],
+      metrics: [[], Validators.required]
     });
   }
 
   previewReport(): void {
     if (this.customReportForm.valid) {
-      console.log('Preview report:', this.customReportForm.value);
+      const formValue = this.customReportForm.value;
+      const startDate = formValue.startDate;
+      const endDate = formValue.endDate;
+      
+      if (startDate && endDate && startDate <= endDate) {
+        console.log('Preview report:', formValue);
+      } else {
+        console.warn('Invalid date range');
+      }
     }
   }
 
   generateReport(): void {
     if (this.customReportForm.valid) {
-      console.log('Generate report:', this.customReportForm.value);
+      const formValue = this.customReportForm.value;
+      const startDate = formValue.startDate;
+      const endDate = formValue.endDate;
+      
+      if (startDate && endDate && startDate <= endDate) {
+        console.log('Generate report:', formValue);
+      } else {
+        console.warn('Invalid date range');
+      }
     }
   }
 }

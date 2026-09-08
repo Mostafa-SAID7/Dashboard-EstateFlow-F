@@ -3,11 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { InputGroupModule } from 'primeng/inputgroup';
+import { InputComponent, ButtonComponent, AlertComponent, SpinnerComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +12,10 @@ import { InputGroupModule } from 'primeng/inputgroup';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    MessageModule,
-    InputGroupModule
+    InputComponent,
+    ButtonComponent,
+    AlertComponent,
+    SpinnerComponent
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
