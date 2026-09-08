@@ -1,1 +1,2 @@
 - [Dependency firewall workarounds](dependency-firewall.md) — blocked transitive npm tarballs may need narrow safe-version overrides before first install.
+- [Angular Vite preview hosts](angular-vite-hosts.md) — Angular application-builder previews need workflow host configuration, not a standalone vite.config.js.
